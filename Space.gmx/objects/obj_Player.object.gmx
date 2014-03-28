@@ -88,7 +88,6 @@ else {
         image_angle = direction;
     }
 }
-
     
 if (isMoving == false &amp;&amp; turnBegin == 1) {
 

@@ -214,6 +214,7 @@ currentVision = 0;
         draw_set_alpha(1);
         stayLight = 1;
         currentVision = 1;
+        
     }
     //this draws semi-transparent fog 2 squares around the player
     if (distance_to_object(obj_LightenParent) &gt;= 32 &amp;&amp; (distance_to_object(obj_LightenParent) &lt; 64)) {
@@ -221,6 +222,7 @@ currentVision = 0;
         draw_rectangle(x+16,y+16,x-16,y-16,false);
         draw_set_alpha(1);
         currentVision = 1;
+        
     }
     
     //this draws black thick fog (no alpha transparency)
@@ -229,6 +231,7 @@ currentVision = 0;
         draw_rectangle(x+16,y+16,x-16,y-16,false);
         draw_set_alpha(1);
         currentVision = 0;
+        
     }   
 }
 else { // previously explored fog

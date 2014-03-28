@@ -25,74 +25,62 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Initialize controller
-if (instance_number(object_index) &gt; 1) {
-// prevent there from being more than one controller
-  instance_destroy();
-  exit;
+            <string>randomize(); // since random() uses the default seed, 
+             // enemy generation is not REALLY random without this
+
+// Number of enemies based on Level Progression?
+enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
+
+globalvar enemySpawn;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="49">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>// 2D-array mirroring map size (31 x 31)
+// 0 = Empty
+// 1 = Occupied by Player or within Player vision
+with (obj_Fog) {
+    if (currentVision == 1) {
+        enemySpawn[x/32, y/32] = 1;
+    }
+    else {
+        enemySpawn[x/32, y/32] = 0;
+    }
 }
 
-mpGrid = mp_grid_create(16, 16, 31, 31, 32, 32); // create a new grid for this room
-
-// If not using tiles, don't pay attention to this, instead just add you instances to the grid
-// loop through the room and add the tiles to the grid
-//for (var yy = 0; yy &lt; room_height; yy += 32)
-//  for (var xx = 0; xx &lt; room_width; xx += 32)
-//    if (tile_layer_find(10, xx, yy) != -1)
-//      mp_grid_add_cell(mpGrid, xx &gt;&gt; 5, yy &gt;&gt; 5); 
-
-// add the player to the grid
-mp_grid_add_cell(mpGrid, (obj_Player.x/32)-1, (obj_Player.y/32)-1);
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="8" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Debug
-draw_set_alpha(0.3);
-mp_grid_draw(mpGrid);
-draw_set_alpha(1);
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="32">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Toggle debug
-visible ^= 1;
+for (i = 0; i &lt; enemyLimit; i += 1) {
+    enemyX = irandom_range(1, 31);
+    enemyY = irandom_range(1, 31);
+    coord = string(enemyX) + "," + string(enemyY);    
+    show_message(coord);
+    
+    
+    if (enemySpawn[enemyX, enemyY] == 0) {
+        newEnemy = instance_create(enemyX*32, enemyY*32, obj_E1);
+        mp_grid_add_cell(obj_PathController.mpGrid, enemyX-1, enemyY-1);
+    }
+    else {
+        i -= 1;
+    }
+}
 </string>
           </argument>
         </arguments>

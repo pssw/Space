@@ -34,6 +34,7 @@
       <object>objects\obj_Fog</object>
       <object>objects\obj_LightenParent</object>
       <object>objects\obj_PathController</object>
+      <object>objects\obj_EnemyGen</object>
       <objects name="old">
         <object>objects\obj_FogOfWar</object>
         <object>objects\obj_LoS2</object>
