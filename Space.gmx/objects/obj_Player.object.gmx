@@ -34,6 +34,8 @@ start = 0;
 turnBegin = 1;  // 1 = Player can move
                 // 0 = Enemy's turn
 
+inRange = 0;
+                
 path = path_add(); // create new path index to be used
 </string>
           </argument>
@@ -124,6 +126,25 @@ else {
         
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
         isMoving = false;
+        
+        // add targeting reticle button if enemy within sight range
+        if (distance_to_object(obj_E1) &lt; 64) {
+                if (inRange == 1) {
+                    exit;
+                }
+                else {
+                    targetButton = instance_create(x+50, y+50, obj_TargetButton);
+                    inRange = 1;
+                }
+        }
+        else {
+            inRange = 0;
+            if (instance_exists(obj_TargetButton)) {
+                with (targetButton) {
+                    instance_destroy();
+                }
+            }
+        }
         
         turnBegin = 0; // set to 1 again after all enemies have gone
     }
