@@ -129,18 +129,18 @@ else {
         
         // add targeting reticle button if enemy within sight range
         if (distance_to_object(obj_E1) &lt; 64) {
-                if (inRange == 1) {
+                if (inRange == 1) { // a target was already within range
                     exit;
                 }
-                else {
+                else {  // targets came into range once player stopped moving
                     targetButton = instance_create(x+50, y+50, obj_TargetButton);
                     inRange = 1;
                 }
         }
-        else {
+        else {  // no targets in range
             inRange = 0;
-            if (instance_exists(obj_TargetButton)) {
-                with (targetButton) {
+            if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
+                with (targetButton) {                // so if the target is out of range, destroy the button
                     instance_destroy();
                 }
             }
