@@ -27,6 +27,10 @@
     <background>background\background1</background>
   </backgrounds>
   <paths name="paths"/>
+  <scripts name="scripts">
+    <script>scripts\scr_Set_GUI.gml</script>
+    <script>scripts\scr_GUI_Set_Anchors.gml</script>
+  </scripts>
   <objects name="objects">
     <objects name="Player">
       <object>objects\obj_Player</object>
@@ -46,10 +50,18 @@
     <objects name="Enemies">
       <object>objects\obj_E1</object>
     </objects>
+    <objects name="Mobile">
+      <object>objects\obj_Devices_HUD_Dpi_Scale</object>
+    </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_Main</room>
   </rooms>
+  <constants number="3">
+    <constant name="landscape">0</constant>
+    <constant name="portrait">1</constant>
+    <constant name="unknown">2</constant>
+  </constants>
   <help>
     <rtf>help.rtf</rtf>
   </help>
