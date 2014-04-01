@@ -133,11 +133,12 @@ else {
                     exit;
                 }
                 else {  // targets came into range once player stopped moving
-                    targetButton = instance_create(x+50, y+50, obj_TargetButton);
+                    targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
                     inRange = 1;
                 }
         }
         else {  // no targets in range
+        
             inRange = 0;
             if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
                 with (targetButton) {                // so if the target is out of range, destroy the button

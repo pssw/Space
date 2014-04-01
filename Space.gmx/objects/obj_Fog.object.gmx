@@ -148,7 +148,7 @@ currentVision = 0;
         <isnot>0</isnot>
       </action>
     </event>
-    <event eventtype="6" enumb="5">
+    <event eventtype="6" enumb="6">
       <action>
         <libid>1</libid>
         <id>603</id>
