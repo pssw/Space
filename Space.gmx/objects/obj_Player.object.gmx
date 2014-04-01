@@ -146,7 +146,7 @@ else {
             }
         }
         
-        turnBegin = 0; // set to 1 again after all enemies have gone
+        //turnBegin = 0; // set to 1 again after all enemies have gone
     }
 }
 </string>
