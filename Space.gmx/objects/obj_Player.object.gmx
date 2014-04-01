@@ -35,7 +35,9 @@ turnBegin = 1;  // 1 = Player can move
                 // 0 = Enemy's turn
 
 inRange = 0;
-                
+
+enemyGen = 0;
+
 path = path_add(); // create new path index to be used
 </string>
           </argument>
@@ -82,10 +84,18 @@ path = path_add(); // create new path index to be used
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (start == 0) {
+            <string>// once the last fog tile has been placed, generate enemies
+if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
+    instance_create(0, 0, obj_EnemyGen);
+    enemyGen = 1;
+    show_message("random enemies generated");
+}
+
+
+if (start == 0) {  // original orientation UP
     image_angle = 90;
 }
-else {
+else { // player orientation = direction
     if (isMoving == true) {
         image_angle = direction;
     }
@@ -116,6 +126,9 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             start = 1;
             path_start(path, 3, 0, true);
         }
+        else { // prevents own cell from clearing if clicking on enemy
+            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+        }   
     }
 }
 

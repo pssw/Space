@@ -32,29 +32,8 @@
 enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
 globalvar enemySpawn;
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="49">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>// 2D-array mirroring map size (31 x 31)
+
+// 2D-array mirroring map size (31 x 31)
 // 0 = Empty
 // 1 = Occupied by Player or within Player vision
 with (obj_Fog) {
@@ -79,8 +58,6 @@ for (i = 0; i &lt; enemyLimit; i += 1) {
         i -= 1;
     }
 }
-
-show_message("done");
 </string>
           </argument>
         </arguments>
