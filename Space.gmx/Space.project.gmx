@@ -30,11 +30,6 @@
   <scripts name="scripts">
     <script>scripts\scr_Set_GUI.gml</script>
     <script>scripts\scr_GUI_Set_Anchors.gml</script>
-    <script>scripts\scr_Device_Room_Scale.gml</script>
-    <script>scripts\scr_Device_View_Scale.gml</script>
-    <script>scripts\scr_GUI_Device_Anchors.gml</script>
-    <script>scripts\scr_Center_View.gml</script>
-    <script>scripts\scr_Zoom_View.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">
@@ -57,8 +52,6 @@
     </objects>
     <objects name="Mobile">
       <object>objects\obj_Devices_HUD_Dpi_Scale</object>
-      <object>objects\obj_Devices_Room_Scale</object>
-      <object>objects\obj_Devices_View_Scale</object>
     </objects>
   </objects>
   <rooms name="rooms">

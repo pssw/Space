@@ -54,7 +54,7 @@ scr_GUI_Set_Anchors();
             <string>// check value of the display width against what was stored in Create
 // if it is different, the orientation changed and we reset teh GUI and anchor points
 if (display_get_width() != old_width) {
-    old_width = display_get_width();
+    	old_width = display_get_width();
     display_type = scr_Set_GUI(base_size, display_type);
     scr_GUI_Set_Anchors();
 }
