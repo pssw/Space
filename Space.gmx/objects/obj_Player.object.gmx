@@ -34,9 +34,11 @@ start = 0;
 turnBegin = 1;  // 1 = Player can move
                 // 0 = Enemy's turn
 
-inRange = 0;
-
 enemyGen = 0;
+
+enemiesWithinRange = 0;
+
+EnemyList = ds_list_create();  
 
 path = path_add(); // create new path index to be used
 </string>
@@ -88,7 +90,7 @@ path = path_add(); // create new path index to be used
 if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
     instance_create(0, 0, obj_EnemyGen);
     enemyGen = 1;
-    show_message("random enemies generated");
+    //show_message("random enemies generated");
 }
 
 
@@ -140,29 +142,75 @@ else {
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
         isMoving = false;
         
-        // add targeting reticle button if enemy within sight range
-        if (distance_to_object(obj_E1) &lt; 64) {
-                if (inRange == 1) { // a target was already within range
-                    exit;
+        for (i = 0; i &lt; instance_number(obj_E1); i += 1) {  // for each instance of the enemy object
+            enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
+            if (distance_to_object(enemy) &lt; 64) {
+                if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range, do nothing
+                    
                 }
-                else {  // targets came into range once player stopped moving
+                else {  // if the enemy instance came into range after the player moved
                     targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
-                    inRange = 1;
+                    enemy.EnemyInRange = 1;      // enemy is now in range
+                    enemiesWithinRange += 1;
+                    //test1 = string(enemy) + " entered range";
+                    //show_message(test1);    // show the enemy instance id
                 }
+            }
+            else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but left)
+                if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
+                    enemy.EnemyInRange = 0;
+                    enemiesWithinRange -= 1;
+                    //test2 = string(enemy) + " left range";
+                    //show_message(test2);
+                }
+                else { // enemy was never in range, do nothing
+
+                }
+                
+            }
         }
-        else {  // no targets in range
-        
-            inRange = 0;
+        // only remove the TargetButton if there are NO enemies remaining in range
+        if (enemiesWithinRange == 0) {
             if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
-                with (targetButton) {                // so if the target is out of range, destroy the button
+                with (obj_TargetButton) {                // so if the target is out of range, destroy the button
                     instance_destroy();
                 }
             }
         }
-        
         //turnBegin = 0; // set to 1 again after all enemies have gone
     }
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="13">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>var str;
+
+ini_open("enemy.ini");
+
+str = ds_list_write(EnemyList);
+
+ini_write_string("Lists", "0", str);
+
+ini_close();
 </string>
           </argument>
         </arguments>

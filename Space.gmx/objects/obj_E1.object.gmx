@@ -34,6 +34,8 @@ image_speed = 0;
 
 start = 0;
 
+EnemyInRange = 0;
+
 path_E1 = path_add(); // create new path index to be used
 </string>
           </argument>
@@ -94,7 +96,7 @@ currentLocation = instance_position(x, y, obj_Fog);
 if (currentLocation.currentVision == 1) {
     visible = 1;
 }
-else {
+else { // enemy is not visible
     visible = 0;
 }
 
@@ -144,6 +146,29 @@ else {
 }
 
 */
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="6">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_message(EnemyInRange);
 </string>
           </argument>
         </arguments>
