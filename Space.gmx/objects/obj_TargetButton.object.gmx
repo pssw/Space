@@ -8,6 +8,29 @@
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
+    <event eventtype="0" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>increment = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
@@ -49,7 +72,32 @@ y = view_yview+50;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message("test");
+            <string>if (ds_list_empty(obj_Player.EnemyList)) {  // should never go here
+    exit;
+}
+else { // an enemy is within range and the Target button has appeared
+
+    if (increment == 0) { // start from the top of the Enemy List
+        target = ds_list_find_value(obj_Player.EnemyList, increment);
+        instance_create(target.x, target.y, obj_TargetReticle);
+    }
+    else { // subsequent enemies in the list
+        with (obj_TargetReticle) {  // destroy current reticle
+            instance_destroy();
+        }
+        // create a new reticle over the next enemy
+        if (increment &gt;= ds_list_size(obj_Player.EnemyList)) { // end of the list
+            increment = 0; // reset back to 0
+            target = ds_list_find_value(obj_Player.EnemyList, increment);
+            instance_create(target.x, target.y, obj_TargetReticle);
+            }
+        else {
+            target = ds_list_find_value(obj_Player.EnemyList, increment);
+            instance_create(target.x, target.y, obj_TargetReticle);
+        }
+    }      
+    increment += 1;  
+}
 </string>
           </argument>
         </arguments>

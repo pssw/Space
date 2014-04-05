@@ -9,6 +9,7 @@
     <sprites name="Player">
       <sprite>sprites\spr_Player</sprite>
       <sprite>sprites\spr_TargetButton</sprite>
+      <sprite>sprites\spr_TargetReticle</sprite>
     </sprites>
     <sprites name="Line of Sight">
       <sprite>sprites\spr_Fog</sprite>
@@ -35,6 +36,7 @@
     <objects name="Player">
       <object>objects\obj_Player</object>
       <object>objects\obj_TargetButton</object>
+      <object>objects\obj_TargetReticle</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>

@@ -152,8 +152,12 @@ else {
                     targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
                     enemy.EnemyInRange = 1;      // enemy is now in range
                     enemiesWithinRange += 1;
-                    //test1 = string(enemy) + " entered range";
-                    //show_message(test1);    // show the enemy instance id
+                    
+                    // add the enemy to the list
+                    ds_list_add(EnemyList, enemy);
+                    
+                    obj_TargetButton.increment += 1;
+                    
                 }
             }
             else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but left)
@@ -162,6 +166,15 @@ else {
                     enemiesWithinRange -= 1;
                     //test2 = string(enemy) + " left range";
                     //show_message(test2);
+                    
+                    // find the index of the enemy from the list and delete it
+                    enemyIndex = ds_list_find_index(EnemyList, enemy);
+                    ds_list_delete(EnemyList, enemyIndex);
+                    
+                    if (obj_TargetButton.increment == enemyIndex) {
+                        obj_TargetButton.increment += 1
+                    }
+                    
                 }
                 else { // enemy was never in range, do nothing
 
@@ -202,15 +215,13 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var str;
+            <string>total = "";
 
-ini_open("enemy.ini");
+for (i = 0; i &lt; ds_list_size(EnemyList); i += 1) {
+    total += string(ds_list_find_value(EnemyList, i)) + ", ";
+}
 
-str = ds_list_write(EnemyList);
-
-ini_write_string("Lists", "0", str);
-
-ini_close();
+show_message(total);
 </string>
           </argument>
         </arguments>
