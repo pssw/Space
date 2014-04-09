@@ -50,7 +50,12 @@
             <kind>1</kind>
             <string>var check = instance_position(x, y, obj_Fog);
 
+// if the reticle is out of sight range, destroy the reticle
 if (check.currentVision == 0) {
+    instance_destroy();
+}
+// if there isn't an enemy within the reticle, destroy the reticle
+if (!instance_position(x, y, obj_E1)) {
     instance_destroy();
 }
 </string>

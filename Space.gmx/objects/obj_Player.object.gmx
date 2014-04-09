@@ -63,7 +63,9 @@ path = path_add(); // create new path index to be used
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>path_delete(path);
+            <string>if (path_exists(path)) {
+    path_delete(path);
+}
 </string>
           </argument>
         </arguments>
@@ -96,6 +98,7 @@ if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
 
 if (start == 0) {  // original orientation UP
     image_angle = 90;
+    mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 }
 else { // player orientation = direction
     if (isMoving == true) {
@@ -118,6 +121,14 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             exit;
         }
         
+        // if clicking on a square with an enemy, shoot the enemy
+        if (instance_position(mouse_x, mouse_y, obj_E1)) {
+            obj_TargetButton.target = obj_E1;
+            //show_message(obj_TargetButton.target);
+            //shot = instance_create(x, y, obj_PlayerPulse1);
+            exit;
+        }
+        
         mx = (mouse_x + 16 &amp; $ffffffe0);
         my = (mouse_y + 16 &amp; $ffffffe0);
         
@@ -133,12 +144,10 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         }   
     }
 }
-
 else {
     if (path_position == 1) {
         image_speed = 0;
         image_index = 0;
-        
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
         isMoving = false;
         
@@ -149,7 +158,11 @@ else {
                     
                 }
                 else {  // if the enemy instance came into range after the player moved
-                    targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
+                    if (!instance_exists(obj_TargetButton)) {
+                        targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
+                        
+                        instance_create(enemy.x, enemy.y, obj_TargetReticle);
+                    }
                     enemy.EnemyInRange = 1;      // enemy is now in range
                     enemiesWithinRange += 1;
                     
@@ -182,17 +195,49 @@ else {
                 
             }
         }
-        // only remove the TargetButton if there are NO enemies remaining in range
-        if (enemiesWithinRange == 0) {
-            if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
-                with (obj_TargetButton) {                // so if the target is out of range, destroy the button
-                    instance_destroy();
-                }
-            }
-        }
         //turnBegin = 0; // set to 1 again after all enemies have gone
     }
 }
+
+// only remove the TargetButton if there are NO enemies remaining in range
+if (enemiesWithinRange == 0) {
+    if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
+        with (obj_TargetButton) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="17">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>// Checking the EnemyList
+
+total = "";
+
+for (i = 0; i &lt; ds_list_size(EnemyList); i += 1) {
+    total += string(ds_list_find_value(EnemyList, i)) + ", ";
+}
+
+show_message(total);
 </string>
           </argument>
         </arguments>
@@ -215,13 +260,13 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>total = "";
+            <string>// only shoot if the TargetReticle exists (Reticle is removed when enemy within is destroyed)
+// change this later so that user can shoot by tapping enemy (which auto-creates a reticle)
+    // make it so tapping enemy re-focuses reticle on enemy instead of shooting
 
-for (i = 0; i &lt; ds_list_size(EnemyList); i += 1) {
-    total += string(ds_list_find_value(EnemyList, i)) + ", ";
+if (instance_exists(obj_TargetReticle)) {
+    shot = instance_create(x, y, obj_PlayerPulse1);
 }
-
-show_message(total);
 </string>
           </argument>
         </arguments>

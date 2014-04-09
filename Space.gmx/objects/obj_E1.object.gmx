@@ -37,6 +37,8 @@ start = 0;
 EnemyInRange = 0;
 
 path_E1 = path_add(); // create new path index to be used
+
+mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 </string>
           </argument>
         </arguments>
@@ -59,7 +61,20 @@ path_E1 = path_add(); // create new path index to be used
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>path_delete(path);
+            <string>if (path_exists(path_E1)) {
+    path_delete(path_E1);
+}
+
+mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+
+// when destroyed, if there are still enemies in range, 
+// create a new target reticle at the next enemy
+if (!ds_list_empty(obj_Player.EnemyList)) {
+    var enemy = ds_list_find_value(obj_Player.EnemyList, 0);
+    instance_create(enemy.x, enemy.y, obj_TargetReticle);
+}
+
+obj_Player.enemiesWithinRange -= 1;
 </string>
           </argument>
         </arguments>
@@ -105,70 +120,6 @@ MAIN AI HERE
 */
 
 obj_Player.turnBegin = 1;
-
-/*
-if (isMoving == false) {
-
-    if (mouse_check_button_pressed(mb_left)) {
-    
-        // if clicking on the square that the player is occupying, do nothing
-        if (mouse_x &gt; bbox_left &amp;&amp; mouse_x &lt; bbox_right &amp;&amp; mouse_y &gt; bbox_top &amp;&amp; mouse_y &lt; bbox_bottom) {
-            exit;
-        }
-        
-        // if clicking on a square outside the player's CURRENT vision, do nothing
-        clickedFog = instance_position(mouse_x, mouse_y, obj_Fog);
-        if (clickedFog.currentVision == 0) {
-            exit;
-        }
-        
-        mx = (mouse_x + 16 &amp; $ffffffe0);
-        my = (mouse_y + 16 &amp; $ffffffe0);
-        
-        mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // clear current cell so player can move
-        if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, mx, my, true)) { // if a path was created, start path
-            isMoving = true;
-            image_speed = 0.5;
-            start = 1;
-            path_start(path_E1, 3, 0, true);
-        }
-    }
-}
-
-else {
-    if (path_position == 1) {
-        image_speed = 0;
-        image_index = 0;
-        
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
-        isMoving = false;
-    }
-}
-
-*/
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="6" enumb="6">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>show_message(EnemyInRange);
 </string>
           </argument>
         </arguments>

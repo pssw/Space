@@ -22,6 +22,9 @@
     <sprites name="Enemies">
       <sprite>sprites\spr_E1</sprite>
     </sprites>
+    <sprites name="Combat">
+      <sprite>sprites\spr_Pulse1</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background">
     <background>background\background0</background>
@@ -54,6 +57,10 @@
     </objects>
     <objects name="Mobile">
       <object>objects\obj_Devices_HUD_Dpi_Scale</object>
+    </objects>
+    <objects name="Combat">
+      <object>objects\obj_PlayerPulse1</object>
+      <object>objects\obj_Pulse1</object>
     </objects>
   </objects>
   <rooms name="rooms">
