@@ -40,7 +40,6 @@
     <script>scripts\scr_Set_GUI.gml</script>
     <script>scripts\scr_GUI_Set_Anchors.gml</script>
   </scripts>
-  <fonts name="fonts"/>
   <objects name="objects">
     <objects name="Player">
       <object>objects\obj_Player</object>
