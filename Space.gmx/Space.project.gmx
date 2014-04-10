@@ -37,8 +37,7 @@
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\scr_Set_GUI.gml</script>
-    <script>scripts\scr_GUI_Set_Anchors.gml</script>
+    <script>scripts\scr_Device_Room_Scale.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">
@@ -64,7 +63,7 @@
       <object>objects\obj_E1</object>
     </objects>
     <objects name="Mobile">
-      <object>objects\obj_Devices_HUD_Dpi_Scale</object>
+      <object>objects\obj_Devices_Room_Scale</object>
     </objects>
     <objects name="Combat">
       <object>objects\obj_PlayerPulse1</object>
