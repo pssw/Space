@@ -10,6 +10,9 @@
       <sprite>sprites\spr_Player</sprite>
       <sprite>sprites\spr_TargetButton</sprite>
       <sprite>sprites\spr_TargetReticle</sprite>
+      <sprite>sprites\spr_Weapon1</sprite>
+      <sprite>sprites\spr_Weapon2</sprite>
+      <sprite>sprites\spr_Weapon3</sprite>
     </sprites>
     <sprites name="Line of Sight">
       <sprite>sprites\spr_Fog</sprite>
@@ -24,6 +27,8 @@
     </sprites>
     <sprites name="Combat">
       <sprite>sprites\spr_Pulse1</sprite>
+      <sprite>sprites\spr_Ion1</sprite>
+      <sprite>sprites\spr_Missile1</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -35,11 +40,15 @@
     <script>scripts\scr_Set_GUI.gml</script>
     <script>scripts\scr_GUI_Set_Anchors.gml</script>
   </scripts>
+  <fonts name="fonts"/>
   <objects name="objects">
     <objects name="Player">
       <object>objects\obj_Player</object>
       <object>objects\obj_TargetButton</object>
       <object>objects\obj_TargetReticle</object>
+      <object>objects\obj_W1</object>
+      <object>objects\obj_W2</object>
+      <object>objects\obj_W3</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>
@@ -60,6 +69,8 @@
     </objects>
     <objects name="Combat">
       <object>objects\obj_PlayerPulse1</object>
+      <object>objects\obj_PlayerIon1</object>
+      <object>objects\obj_PlayerMissile1</object>
       <object>objects\obj_Pulse1</object>
     </objects>
   </objects>

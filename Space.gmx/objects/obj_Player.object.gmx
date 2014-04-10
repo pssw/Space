@@ -160,7 +160,9 @@ else {
                 else {  // if the enemy instance came into range after the player moved
                     if (!instance_exists(obj_TargetButton)) {
                         targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
-                        
+                        weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
+                        weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
+                        weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
                         instance_create(enemy.x, enemy.y, obj_TargetReticle);
                     }
                     enemy.EnemyInRange = 1;      // enemy is now in range
@@ -205,6 +207,15 @@ if (enemiesWithinRange == 0) {
         with (obj_TargetButton) {                // so if the target is out of range, destroy the button
             instance_destroy();
         }
+        with (obj_W1) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W2) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W3) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
     }
 }
 </string>
@@ -238,35 +249,6 @@ for (i = 0; i &lt; ds_list_size(EnemyList); i += 1) {
 }
 
 show_message(total);
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="13">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>// only shoot if the TargetReticle exists (Reticle is removed when enemy within is destroyed)
-// change this later so that user can shoot by tapping enemy (which auto-creates a reticle)
-    // make it so tapping enemy re-focuses reticle on enemy instead of shooting
-
-if (instance_exists(obj_TargetReticle)) {
-    shot = instance_create(x, y, obj_PlayerPulse1);
-}
 </string>
           </argument>
         </arguments>
