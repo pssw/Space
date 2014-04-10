@@ -47,6 +47,7 @@
       <object>objects\obj_W1</object>
       <object>objects\obj_W2</object>
       <object>objects\obj_W3</object>
+      <object>objects\obj_ParentUI</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>
