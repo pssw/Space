@@ -42,12 +42,12 @@
   <objects name="objects">
     <objects name="Player">
       <object>objects\obj_Player</object>
+      <object>objects\obj_ParentUI</object>
       <object>objects\obj_TargetButton</object>
       <object>objects\obj_TargetReticle</object>
       <object>objects\obj_W1</object>
       <object>objects\obj_W2</object>
       <object>objects\obj_W3</object>
-      <object>objects\obj_ParentUI</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>

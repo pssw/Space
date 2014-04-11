@@ -115,18 +115,16 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             exit;
         }
         
-        // if clicking on a square outside the player's CURRENT vision, do nothing
+        // if clicking on a square outside the player's CURRENT vision and not previously explored, do nothing
+        // if clicking on a previously explored tile UNDER a UI element, only do the UI stuff (don't move)
         clickedFog = instance_position(mouse_x, mouse_y, obj_Fog);
-        if (clickedFog.currentVision == 0) {
+        if (clickedFog.currentVision == 0 &amp;&amp; clickedFog.stayLight == 0) {
             exit;
         }
-        
-        // if clicking on a square with an enemy, shoot the enemy
-        if (instance_position(mouse_x, mouse_y, obj_E1)) {
-            obj_TargetButton.target = obj_E1;
-            //show_message(obj_TargetButton.target);
-            //shot = instance_create(x, y, obj_PlayerPulse1);
-            exit;
+        else {
+            if (instance_position(mouse_x, mouse_y, obj_ParentUI)) {
+                exit;
+            }
         }
         
         mx = (mouse_x + 16 &amp; $ffffffe0);

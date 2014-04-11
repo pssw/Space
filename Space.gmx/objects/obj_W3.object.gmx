@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>-1000</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_ParentUI</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="3" enumb="0">
@@ -53,8 +53,11 @@ y = view_yview + 200;
 // change this later so that user can shoot by tapping enemy (which auto-creates a reticle)
     // make it so tapping enemy re-focuses reticle on enemy instead of shooting
 
-if (instance_exists(obj_TargetReticle)) {
-    shot = instance_create(obj_Player.x, obj_Player.y, obj_PlayerMissile1);
+if (obj_ParentUI.inProgress == 0) {
+    if (instance_exists(obj_TargetReticle)) {
+        shot = instance_create(obj_Player.x, obj_Player.y, obj_PlayerMissile1);
+        obj_ParentUI.inProgress = 1;
+    }
 }
 </string>
           </argument>
