@@ -41,6 +41,11 @@ enemiesWithinRange = 0;
 EnemyList = ds_list_create();  
 
 path = path_add(); // create new path index to be used
+
+// Stats and Mechanics
+
+hp = 100;
+max_hp = 100;
 </string>
           </argument>
         </arguments>
