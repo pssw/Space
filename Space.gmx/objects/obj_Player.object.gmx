@@ -158,7 +158,7 @@ else {
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
             if (distance_to_object(enemy) &lt; 64) {
                 if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range, do nothing
-                    
+                
                 }
                 else {  // if the enemy instance came into range after the player moved
                     if (!instance_exists(obj_TargetButton)) {
@@ -200,7 +200,8 @@ else {
                 
             }
         }
-        //turnBegin = 0; // set to 1 again after all enemies have gone
+        obj_E1.turnBegin = 1;
+        turnBegin = 0;
     }
 }
 
@@ -243,7 +244,8 @@ if (enemiesWithinRange == 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// Checking the EnemyList
+            <string>/*
+// Checking the EnemyList
 
 total = "";
 
@@ -252,6 +254,7 @@ for (i = 0; i &lt; ds_list_size(EnemyList); i += 1) {
 }
 
 show_message(total);
+*/
 </string>
           </argument>
         </arguments>

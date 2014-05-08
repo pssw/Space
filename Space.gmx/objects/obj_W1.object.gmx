@@ -59,6 +59,7 @@ if (obj_ParentUI.inProgress == 0) {
         obj_ParentUI.inProgress = 1;
     }
 }
+obj_Player.turnBegin = 0;
 </string>
           </argument>
         </arguments>

@@ -28,6 +28,7 @@
             <string>randomize(); // since random() uses the default seed, 
              // enemy generation is not REALLY random without this
 
+/*
 // Number of enemies based on Level Progression?
 enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
@@ -58,6 +59,8 @@ for (i = 0; i &lt; enemyLimit; i += 1) {
         i -= 1;
     }
 }
+
+*/
 </string>
           </argument>
         </arguments>

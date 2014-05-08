@@ -26,15 +26,15 @@
           <argument>
             <kind>1</kind>
             <string>isMoving = false;
-moveTimer = 0;
 
-speedX = 0;
-speedY = 0;
 image_speed = 0;
 
 start = 0;
 
 EnemyInRange = 0;
+
+turnBegin = 0; // 1 = Enemy can move
+               // 0 = Player can move
 
 path_E1 = path_add(); // create new path index to be used
 
@@ -44,6 +44,9 @@ mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
 hp = 3;
 max_hp = 3;
+
+range = 12 // there are 12 squares + current square (0-12) within distance of 2 of Enemy
+           // corners don't count (check scr_Movement diagram)
 </string>
           </argument>
         </arguments>
@@ -120,12 +123,39 @@ else { // enemy is not visible
     visible = 0;
 }
 
-/*
-MAIN AI HERE
-*/
-
 if (hp &lt;= 0) {
     instance_destroy();
+}
+
+// Movement AI
+if (isMoving == false &amp;&amp; turnBegin == 1) {
+    // add IF clause for when Player is within range later
+    
+    // declare and set targetx and targety as the coordinates where the enemy will go
+    // use script to see if that square is empty
+    TargetArray = scr_Movement(range);
+    
+    mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // clear current cell so enemy can move
+    if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
+        
+        isMoving = true;
+        image_speed = 0.5;
+        start = 1;
+        path_start(path_E1, 3, 0, true);
+        
+    }
+    else { // prevents own cell from clearing if clicking on enemy (check if needed for Enemy paths)
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+    } 
+}
+else {
+    if (path_position == 1) {
+        image_speed = 0;
+        image_index = 0;
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+        isMoving = false;
+        turnBegin = 0;
+    }
 }
 
 obj_Player.turnBegin = 1;
@@ -151,19 +181,23 @@ obj_Player.turnBegin = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// if the enemy doesn't have a reticle on them, 
-// destroy the current reticle and create a new one at the current enemy
-if (!instance_position(x, y, obj_TargetReticle)) {
+            <string>// only allow player to left-click on enemy when it's his turn
+if (obj_Player.turnBegin == 1) {
 
-    with (obj_TargetReticle) {
-        instance_destroy();
+    // if the enemy doesn't have a reticle on them, 
+    // destroy the current reticle and create a new one at the current enemy
+    if (!instance_position(x, y, obj_TargetReticle)) {
+    
+        with (obj_TargetReticle) {
+            instance_destroy();
+        }
+        
+        instance_create(x, y, obj_TargetReticle);
+        
+        // set the index increment of EnemyList to the currently clicked enemy
+        obj_TargetButton.increment = ds_list_find_index(obj_Player.EnemyList, id);
+        
     }
-    
-    instance_create(x, y, obj_TargetReticle);
-    
-    // set the index increment of EnemyList to the currently clicked enemy
-    obj_TargetButton.increment = ds_list_find_index(obj_Player.EnemyList, id);
-    
 }
 </string>
           </argument>
