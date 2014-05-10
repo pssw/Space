@@ -87,31 +87,6 @@ else {
     target = ds_list_find_value(obj_Player.EnemyList, increment);
     instance_create(target.x, target.y, obj_TargetReticle);
 }
-
-/*
-
-if (increment == 0) { // start from the top of the Enemy List
-    target = ds_list_find_value(obj_Player.EnemyList, increment);
-    instance_create(target.x, target.y, obj_TargetReticle);
-}
-else { // subsequent enemies in the list
-    with (obj_TargetReticle) {  // destroy current reticle
-        instance_destroy();
-    }
-    // create a new reticle over the next enemy
-    if (increment &gt;= ds_list_size(obj_Player.EnemyList)) { // end of the list
-        increment = 0; // reset back to 0
-        target = ds_list_find_value(obj_Player.EnemyList, increment);
-        instance_create(target.x, target.y, obj_TargetReticle);
-        }
-    else {
-        target = ds_list_find_value(obj_Player.EnemyList, increment);
-        instance_create(target.x, target.y, obj_TargetReticle);
-    }
-}      
-increment += 1;  
-
-*/
 </string>
           </argument>
         </arguments>

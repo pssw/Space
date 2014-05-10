@@ -61,21 +61,13 @@ if (instance_exists(obj_TargetReticle)) {
             <kind>1</kind>
             <string>if (instance_position(x, y, aim)) {
     
-    // remove the enemy from the list
-    removeEnemy = ds_list_find_index(obj_Player.EnemyList, aim);
-    ds_list_delete(obj_Player.EnemyList, removeEnemy);
-    
-    // increment the EnemyList index by 1
-    if (obj_TargetButton.increment == removeEnemy) {
-        obj_TargetButton.increment += 1
-    }
-    
     // destroy the targeted enemy object (add HP mechanics into this later)
     with (aim) {
         hp -= 3;
     }
     // destroy bullet
     obj_ParentUI.inProgress = 0;
+    obj_E1.turnBegin = 1;
     instance_destroy();
 }
 </string>

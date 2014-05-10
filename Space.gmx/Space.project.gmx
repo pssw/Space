@@ -8,6 +8,7 @@
   <sprites name="sprites">
     <sprites name="Player">
       <sprite>sprites\spr_Player</sprite>
+      <sprite>sprites\spr_PlayerAngle</sprite>
       <sprite>sprites\spr_TargetButton</sprite>
       <sprite>sprites\spr_TargetReticle</sprite>
       <sprite>sprites\spr_Weapon1</sprite>
@@ -24,6 +25,7 @@
     </sprites>
     <sprites name="Enemies">
       <sprite>sprites\spr_E1</sprite>
+      <sprite>sprites\spr_E1Angle</sprite>
     </sprites>
     <sprites name="Combat">
       <sprite>sprites\spr_Pulse1</sprite>

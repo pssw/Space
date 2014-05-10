@@ -32,6 +32,7 @@ image_speed = 0;
 start = 0;
 
 EnemyInRange = 0;
+PlayerInRange = 0;
 
 turnBegin = 0; // 1 = Enemy can move
                // 0 = Player can move
@@ -45,8 +46,10 @@ mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 hp = 3;
 max_hp = 3;
 
-range = 12 // there are 12 squares + current square (0-12) within distance of 2 of Enemy
-           // corners don't count (check scr_Movement diagram)
+range = 12; // there are 12 squares + current square (0-12) within distance of 2 of Enemy
+            // corners don't count (check scr_Movement diagram)
+           
+setNewReticle = 0;
 </string>
           </argument>
         </arguments>
@@ -124,6 +127,19 @@ else { // enemy is not visible
 }
 
 if (hp &lt;= 0) {
+    
+    /*
+    // taken from obj_PlayerPulse1.Step
+    // remove the enemy from the list
+    removeEnemy = ds_list_find_index(obj_Player.EnemyList, aim);
+    ds_list_delete(obj_Player.EnemyList, removeEnemy);
+    
+    // increment the EnemyList index by 1
+    if (obj_TargetButton.increment == removeEnemy) {
+        obj_TargetButton.increment += 1
+    }
+    */
+
     instance_destroy();
 }
 
@@ -137,28 +153,123 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
     
     mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // clear current cell so enemy can move
     if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
+    
+        if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move), check to shoot
+            // do a check if Player is within range -&gt; if so, shoot
+            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+            turnBegin = 0;
+            obj_Player.turnBegin = 1;
+        }
+        else {
+            if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
+                setNewReticle = 1;
+            }
         
-        isMoving = true;
-        image_speed = 0.5;
-        start = 1;
-        path_start(path_E1, 3, 0, true);
+            isMoving = true;
+            image_speed = 0.5;
+            start = 1;
+            path_start(path_E1, 3, 0, true);
+        }
         
     }
     else { // prevents own cell from clearing if clicking on enemy (check if needed for Enemy paths)
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid   
     } 
 }
 else {
-    if (path_position == 1) {
+    if (path_position == 1 &amp;&amp; turnBegin == 1) {
         image_speed = 0;
-        image_index = 0;
+        if (round(direction) == 225) { // SW
+            image_angle = 0;
+            sprite_index = spr_E1Angle;
+            image_index = 0;
+        }
+        else if (round(direction) == 315) { // SE
+            image_angle = 0;
+            sprite_index = spr_E1Angle;
+            image_index = 1;
+        }
+        else if (round(direction) == 45) { // NE
+            image_angle = 0;
+            sprite_index = spr_E1Angle;
+            image_index = 2;
+        }
+        else if (round(direction) == 135) { // NW
+            image_angle = 0;
+            sprite_index = spr_E1Angle;
+            image_index = 3;
+        }
+        else { // N, E, S, W
+            sprite_index = spr_E1;
+            image_index = 0;
+        }
+        
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
         isMoving = false;
+        
+        if (setNewReticle == 1) {
+            instance_create(TargetArray[0], TargetArray[1], obj_TargetReticle);
+            setNewReticle = 0;
+        }
+        
+        if (distance_to_object(obj_Player) &lt; 64) { // after enemy moved, player is in range
+                
+            if (!instance_exists(obj_TargetButton)) {
+                targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
+                weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
+                weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
+                weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
+                instance_create(x, y, obj_TargetReticle);
+            }
+            EnemyInRange = 1;      // enemy is now in range
+            
+            // add the enemy to the list
+            needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
+            if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
+                ds_list_add(obj_Player.EnemyList, id);
+                obj_Player.enemiesWithinRange += 1;
+                show_message("addedByEnemy");
+                obj_TargetButton.increment += 1;
+            }
+        }
+        else { // after enemy moved, player is out of range
+
+            EnemyInRange = 0;
+            // find the index of the enemy from the list and delete it
+            needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
+            if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
+                ds_list_delete(obj_Player.EnemyList, needToDelete);
+                obj_Player.enemiesWithinRange -= 1;
+                show_message("deletedByEnemy");
+                if (obj_TargetButton.increment == id) {
+                    obj_TargetButton.increment += 1;
+                }
+            }
+        }
         turnBegin = 0;
+        obj_Player.turnBegin = 1;
     }
 }
 
-obj_Player.turnBegin = 1;
+// only remove the TargetButton if there are NO enemies remaining in range
+if (obj_Player.enemiesWithinRange == 0) {
+    if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
+        with (obj_TargetButton) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W1) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W2) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W3) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+    }
+}
+
+
 </string>
           </argument>
         </arguments>

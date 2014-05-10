@@ -14,7 +14,8 @@
 
 var testSquare;
 
-switch (irandom(argument0)) {
+//switch (irandom(argument0)) {
+switch (irandom(1)) {
     case 0:
         var target;
         target[0] = x;
@@ -24,7 +25,14 @@ switch (irandom(argument0)) {
     case 1:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x + 32,y);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0); 
+            // Figure out this recursion later
+            // Ideally if the square is blocked, keep using this script until
+            // an unblocked square is found (if all squares blocked, don't move)
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -36,7 +44,11 @@ switch (irandom(argument0)) {
     case 2:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x + 32, y + 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -48,7 +60,11 @@ switch (irandom(argument0)) {
     case 3:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x, y + 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -60,7 +76,11 @@ switch (irandom(argument0)) {
     case 4:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x - 32, y + 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -72,7 +92,11 @@ switch (irandom(argument0)) {
     case 5:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x - 32, y);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -84,7 +108,11 @@ switch (irandom(argument0)) {
     case 6:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x - 32, y - 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -96,7 +124,11 @@ switch (irandom(argument0)) {
     case 7:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x, y - 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -108,7 +140,11 @@ switch (irandom(argument0)) {
     case 8:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x + 32, y - 32);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -120,7 +156,11 @@ switch (irandom(argument0)) {
     case 9:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x + 64, y);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -132,7 +172,11 @@ switch (irandom(argument0)) {
     case 10:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x , y + 64);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -144,7 +188,11 @@ switch (irandom(argument0)) {
     case 11:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x - 64, y);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
@@ -156,7 +204,11 @@ switch (irandom(argument0)) {
     case 12:
         testSquare = scr_mp_grid_free(obj_PathController.mpGrid,x, y - 64);
         if (testSquare == 0) {
-            scr_Movement(argument0);
+            // scr_Movement(argument0);
+            var target;
+            target[0] = x;
+            target[1] = y;
+            return target;
         }
         else {
             var target;
