@@ -127,19 +127,25 @@ else { // enemy is not visible
 }
 
 if (hp &lt;= 0) {
-    
-    /*
     // taken from obj_PlayerPulse1.Step
-    // remove the enemy from the list
-    removeEnemy = ds_list_find_index(obj_Player.EnemyList, aim);
+    // remove the enemy from the list of units within player sight
+    removeEnemy = ds_list_find_index(obj_Player.EnemyList, id);
     ds_list_delete(obj_Player.EnemyList, removeEnemy);
     
     // increment the EnemyList index by 1
     if (obj_TargetButton.increment == removeEnemy) {
-        obj_TargetButton.increment += 1
+        obj_TargetButton.increment += 1;
     }
-    */
-
+    
+    // remove the enemy from the overall enemy unit turn order
+    removeEnemyTurn = ds_list_find_index(obj_TurnController.EnemyTurnList, id);
+    ds_list_delete(obj_TurnController.EnemyTurnList, removeEnemyTurn);
+    
+    turnBegin = 0;
+    
+    // change this later with the enemy array concept (all units in array finish before
+    // player's turn begins
+    obj_Player.turnBegin = 1;
     instance_destroy();
 }
 
