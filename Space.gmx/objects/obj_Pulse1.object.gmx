@@ -27,12 +27,8 @@
             <kind>1</kind>
             <string>speed = 4;
 
-// set angle towards target
-aim = obj_TargetButton.target;
-direction = point_direction(x, y, aim.x, aim.y);
+direction = point_direction(x, y, obj_Player.x, obj_Player.y);
 image_angle = direction - 90;
-
-
 </string>
           </argument>
         </arguments>
@@ -55,7 +51,12 @@ image_angle = direction - 90;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (instance_position(x, y, obj_TargetButton.target)) {
+            <string>if (instance_position(x, y, obj_Player)) {
+
+    with (obj_Player) {
+        hp -= 1;
+    }
+    // destroy bullet
     instance_destroy();
 }
 </string>

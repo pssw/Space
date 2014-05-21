@@ -145,7 +145,7 @@ if (hp &lt;= 0) {
     
     // change this later with the enemy array concept (all units in array finish before
     // player's turn begins
-    obj_Player.turnBegin = 1;
+    // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
     instance_destroy();
 }
 
@@ -164,7 +164,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             // do a check if Player is within range -&gt; if so, shoot
             mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
             turnBegin = 0;
-            obj_Player.turnBegin = 1;
+            // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
         }
         else {
             if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
@@ -253,7 +253,7 @@ else {
             }
         }
         turnBegin = 0;
-        obj_Player.turnBegin = 1;
+        // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
     }
 }
 

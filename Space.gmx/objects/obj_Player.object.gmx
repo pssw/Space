@@ -228,7 +228,7 @@ else {
             }
         }
         turnBegin = 0;
-        obj_E1.turnBegin = 1;
+        obj_TurnController.EnemyCounter = 1;
     }
 }
 

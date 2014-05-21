@@ -55,13 +55,17 @@ EnemyCounter = 0;
 // Set EnemyCounter to 0 and the player's turnBegin to 1.
 if (EnemyCounter == 1) {
 
+    EnemyCounter = 0;
+
     for (i = 0; i &lt; ds_list_size(EnemyTurnList); i += 1) {
         currentEnemy = ds_list_find_value(EnemyTurnList, i);
-        currentEnemy.turnBegin = 1;
+        if (currentEnemy.turnBegin &lt; 1) {
+            currentEnemy.turnBegin = 1;
+        }
     }
-
-    EnemyCounter = 0;
+    obj_Player.turnBegin = 1;
 }
+
 </string>
           </argument>
         </arguments>

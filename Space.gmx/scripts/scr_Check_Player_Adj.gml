@@ -1,15 +1,18 @@
 // scr_mp_grid_free(obj_PathController.mpGrid, x, y);
 
 // scr_Movement(range)
-// This script can be used for Enemy Movement with range 2
+// This script is used to check whether the squares next to the player are empty.
+// If they are and an enemy unit is in range, it will move towards the player
 /*
-| x | x |12| x | x |
-| x | 6 |7 | 8 | x |
-|11 | 5 |0 | 1 | 9 |
-| x | 4 |3 | 2 | x |
-| x | x |10| x | x |
+| 19 | 20 | 21 | 22 | 23 |
+| 18 | 6  | 7  | 8  | 24 |
+| 17 | 5  | 0  | 1  | 9  |
+| 16 | 4  | 3  | 2  | 10 |
+| 15 | 14 | 13 | 12 | 11 |
 
 0 = No Movement
+
+Use this for later
 */
 
 var testSquare;
