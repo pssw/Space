@@ -39,7 +39,8 @@ turnBegin = 0; // 1 = Enemy can move
 
 path_E1 = path_add(); // create new path index to be used
 
-mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+// this is already done in obj_EnemyGen.Create
+// mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
 // Stats and Mechanics
 
@@ -157,14 +158,15 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
     // use script to see if that square is empty
     TargetArray = scr_Movement(range);
     
-    mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // clear current cell so enemy can move
+    // old: mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+    // after extending the outer border from 1 to 2 cells, shift mp_grid operations by 2 to compensate
+    mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so enemy can move
     if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
     
         if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move), check to shoot
             // do a check if Player is within range -&gt; if so, shoot
-            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
             turnBegin = 0;
-            // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
         }
         else {
             if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
@@ -179,7 +181,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         
     }
     else { // prevents own cell from clearing if clicking on enemy (check if needed for Enemy paths)
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid   
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
     } 
 }
 else {
@@ -210,7 +212,7 @@ else {
             image_index = 0;
         }
         
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         isMoving = false;
         
         if (setNewReticle == 1) {
@@ -276,6 +278,33 @@ if (obj_Player.enemiesWithinRange == 0) {
 }
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_message(x);
+show_message(x/32);
+
+show_message(y);
+show_message(y/32);
 </string>
           </argument>
         </arguments>

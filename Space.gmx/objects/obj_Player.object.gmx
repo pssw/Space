@@ -104,7 +104,9 @@ if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
 
 if (start == 0) {  // original orientation UP
     image_angle = 90;
-    mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+    // outer border changed from 1 cell width to 2 -&gt; compensate on the mp_grid with (x/32)-2 and (y/32)-2
+    // see obj_E1 explanation
+    mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
 }
 
 else { // player orientation = direction
@@ -118,7 +120,7 @@ else { // player orientation = direction
 if (isMoving == false &amp;&amp; turnBegin == 1) {
 
     if (mouse_check_button_pressed(mb_left)) {
-    
+        
         if (mouse_x &gt; bbox_left &amp;&amp; mouse_x &lt; bbox_right &amp;&amp; mouse_y &gt; bbox_top &amp;&amp; mouse_y &lt; bbox_bottom) {
             exit;
         }
@@ -138,7 +140,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         mx = (mouse_x + 16 &amp; $ffffffe0);
         my = (mouse_y + 16 &amp; $ffffffe0);
         
-        mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // clear current cell so player can move
+        mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so player can move
         if (mp_grid_path(obj_PathController.mpGrid, path, x, y, mx, my, true)) { // if a path was created, start path
             isMoving = true;
             sprite_index = spr_Player;
@@ -147,7 +149,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             path_start(path, 3, 0, true);
         }
         else { // prevents own cell from clearing if clicking on enemy
-            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         }   
     }
 }
@@ -179,7 +181,7 @@ else {
             image_index = 0;
         }
         
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1); // if finished, add self back into grid
+        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         isMoving = false;
         for (i = 0; i &lt; instance_number(obj_E1); i += 1) {  // for each instance of the enemy object
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
@@ -281,6 +283,36 @@ if (menuCounter == 0) {
     menuCounter = 15;
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="18">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>newEnemy = instance_create(64, 64, obj_E1);
+mp_grid_add_cell(obj_PathController.mpGrid, 1-1, 1-1);
+
+// enemyX = 2, enemyY = 2
+
+/*
+newEnemy = instance_create(enemyX*32, enemyY*32, obj_E1);
+mp_grid_add_cell(obj_PathController.mpGrid, enemyX-1, enemyY-1);
 </string>
           </argument>
         </arguments>

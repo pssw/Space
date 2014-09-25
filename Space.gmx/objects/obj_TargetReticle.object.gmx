@@ -55,6 +55,7 @@ if (check.currentVision == 0) {
     instance_destroy();
 }
 // if there isn't an enemy within the reticle, destroy the reticle
+// once multiple enemies exist, create a Parent for all enemies and replace obj_E1 with it
 if (!instance_position(x, y, obj_E1)) {
     instance_destroy();
 }

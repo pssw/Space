@@ -32,7 +32,11 @@ if (instance_number(object_index) &gt; 1) {
   exit;
 }
 
-mpGrid = mp_grid_create(16, 16, 31, 31, 32, 32); // create a new grid for this room
+// create a 30x30 to allow room for UI elements
+mpGrid = mp_grid_create(48, 48, 30, 30, 32, 32); // create a new grid for this room
+
+// original 31x31
+// mpGrid = mp_grid_create(16, 16, 31, 31, 32, 32); // create a new grid for this room
 </string>
           </argument>
         </arguments>

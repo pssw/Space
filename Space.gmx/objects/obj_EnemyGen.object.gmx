@@ -25,13 +25,15 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>randomize(); // since random() uses the default seed, 
+            <string>// obj_EnemyGen is created in obj_Player.Step
+
+randomize(); // since random() uses the default seed, 
              // enemy generation is not REALLY random without this
 
 // Number of enemies based on Level Progression?
-enemyLimit = 2 // L1-5: 10, L6-10: 15, L11-15: 20, etc
+enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
-// 2D-array mirroring map size (31 x 31)
+// 2D-array mirroring map size (30 x 30)
 // 0 = Empty
 // 1 = Occupied by Player or within Player vision
 globalvar enemySpawn;
@@ -45,6 +47,32 @@ with (obj_Fog) {
     }
 }
 
+
+// place enemies in a square that is not seen by the player up to the enemyLimit
+for (i = 0; i &lt; enemyLimit; i += 1) {
+    // using 2D-array coordinates, (0,0) is top left and (29,29) is top right
+    // this is a 30x30 array
+    enemyX = irandom_range(0, 29);
+    enemyY = irandom_range(0, 29);
+    
+    // since the full game board has a 2-cell border that is restricted, this means 
+    // the coordinates enemyX and enemyY must ADD 2 in order to be within the allowable
+    // playable area.
+    if (enemySpawn[enemyX+2, enemyY+2] == 0) {
+        // similarly, since the top-left PLAYABLE cell starts at (64, 64), enemyX and
+        // enemyY must be adjusted by 2 cell-widths/heights (64 pixels) to spawn properly
+        newEnemy = instance_create((enemyX*32)+64, (enemyY*32)+64, obj_E1);
+        // since the playable area mp_grid starts within the 2-cell border, enemyX and
+        // enemyY do not need to be changed
+        mp_grid_add_cell(obj_PathController.mpGrid, enemyX, enemyY);
+        ds_list_add(obj_TurnController.EnemyTurnList, newEnemy);
+    }
+    else {
+        i -= 1;
+    }
+}
+
+/*
 // place enemies in a square that is not seen by the player up to the enemyLimit
 for (i = 0; i &lt; enemyLimit; i += 1) {
     enemyX = irandom_range(1, 31);
@@ -96,12 +124,12 @@ for (i = 0; i &lt; enemyLimit; i += 1) {
     // turn this into a script to avoid copy&amp;paste from Create event?
     // at the moment, always create ONE more enemy if all enemies are destroyed
     for (i = 0; i &lt; 1; i += 1) {
-        enemyX = irandom_range(1, 31);
-        enemyY = irandom_range(1, 31);
+        enemyX = irandom_range(0, 29);
+        enemyY = irandom_range(0, 29);
     
-        if (enemySpawn[enemyX, enemyY] == 0) {
-            newEnemy = instance_create(enemyX*32, enemyY*32, obj_E1);
-            mp_grid_add_cell(obj_PathController.mpGrid, enemyX-1, enemyY-1);
+        if (enemySpawn[enemyX+2, enemyY+2] == 0) {
+            newEnemy = instance_create((enemyX*32)+64, (enemyY*32)+64, obj_E1);
+            mp_grid_add_cell(obj_PathController.mpGrid, enemyX, enemyY);
             ds_list_add(obj_TurnController.EnemyTurnList, newEnemy);
         }
         else {
