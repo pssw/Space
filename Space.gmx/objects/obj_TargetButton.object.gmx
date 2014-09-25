@@ -48,8 +48,13 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>x = view_xview + 615;
-y = view_yview + 50;
+            <string>// use for WINDOWS
+// x = view_xview + 615;
+// y = view_yview + 50;
+
+// use for MOBILE
+x = view_xview[0] + view_wview[0] - 25;
+y = view_yview[0] + 25;
 </string>
           </argument>
         </arguments>
@@ -109,7 +114,13 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_sprite(spr_TargetButton,1,view_xview+615,view_yview+50)
+            <string>// use for WINDOWS
+// draw_sprite(spr_TargetButton,1,view_xview+615,view_yview+50)
+
+// view_hview[0] = 512, view_wview[0] =320
+
+// use for MOBILE
+draw_sprite(spr_TargetButton,1,view_xview[0] + view_wview[0] - 25, view_yview[0] + 25)
 </string>
           </argument>
         </arguments>

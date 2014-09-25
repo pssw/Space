@@ -33,6 +33,10 @@ build = 0
 
 // if currentVision = 1, the player can move to that location
 currentVision = 0;
+
+// if mapBorder = 1, any players or units cannot move or be placed there
+// mapBorder tiles are used for placing UI elements
+// if fog is in X,Y (N/E/S/W) 64 pixels, set mapBorder = 1
 </string>
           </argument>
         </arguments>

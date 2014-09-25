@@ -25,13 +25,16 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/*
-
+            <string>
+//                                                        
 scr_Device_Room_Scale(min(room_width, 1024), min(room_height, 1024));  // call the script to set view port sizes
 
 // set the view width and height
-view_hview[0] = view_hport[0];
-view_wview[0] = view_wport[0];
+// originally:  view_hport[0];
+//              view_wport[0];
+// This looks better on mobile but some UI gets cropped out (target button, weapon buttons)
+view_hview[0] = view_hport[0]/2;
+view_wview[0] = view_wport[0]/2;
 
 // centers the view on the screen
 view_xview[0] = (room_width/2) - (view_wview[0]/2);
