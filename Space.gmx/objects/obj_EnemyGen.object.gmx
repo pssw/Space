@@ -31,7 +31,7 @@ randomize(); // since random() uses the default seed,
              // enemy generation is not REALLY random without this
 
 // Number of enemies based on Level Progression?
-enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
+enemyLimit = 2 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
 // 2D-array mirroring map size (30 x 30)
 // 0 = Empty
@@ -52,8 +52,8 @@ with (obj_Fog) {
 for (i = 0; i &lt; enemyLimit; i += 1) {
     // using 2D-array coordinates, (0,0) is top left and (29,29) is top right
     // this is a 30x30 array
-    enemyX = irandom_range(0, 29);
-    enemyY = irandom_range(0, 29);
+    enemyX = irandom_range(0, 28);
+    enemyY = irandom_range(0, 28);
     
     // since the full game board has a 2-cell border that is restricted, this means 
     // the coordinates enemyX and enemyY must ADD 2 in order to be within the allowable
@@ -124,8 +124,8 @@ for (i = 0; i &lt; enemyLimit; i += 1) {
     // turn this into a script to avoid copy&amp;paste from Create event?
     // at the moment, always create ONE more enemy if all enemies are destroyed
     for (i = 0; i &lt; 1; i += 1) {
-        enemyX = irandom_range(0, 29);
-        enemyY = irandom_range(0, 29);
+        enemyX = irandom_range(0, 28);
+        enemyY = irandom_range(0, 28);
     
         if (enemySpawn[enemyX+2, enemyY+2] == 0) {
             newEnemy = instance_create((enemyX*32)+64, (enemyY*32)+64, obj_E1);

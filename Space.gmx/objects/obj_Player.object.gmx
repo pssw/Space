@@ -305,14 +305,9 @@ if (menuCounter == 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>newEnemy = instance_create(64, 64, obj_E1);
-mp_grid_add_cell(obj_PathController.mpGrid, 1-1, 1-1);
+            <string>newEnemy = instance_create((28*32)+64, (28*32)+64, obj_E1);
+mp_grid_add_cell(obj_PathController.mpGrid, 28, 28);
 
-// enemyX = 2, enemyY = 2
-
-/*
-newEnemy = instance_create(enemyX*32, enemyY*32, obj_E1);
-mp_grid_add_cell(obj_PathController.mpGrid, enemyX-1, enemyY-1);
 </string>
           </argument>
         </arguments>
