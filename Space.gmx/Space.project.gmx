@@ -32,6 +32,17 @@
       <sprite>sprites\spr_Ion1</sprite>
       <sprite>sprites\spr_Missile1</sprite>
     </sprites>
+    <sprites name="Menu">
+      <sprite>sprites\spr_LoadMenu</sprite>
+      <sprite>sprites\spr_Menu</sprite>
+      <sprite>sprites\spr_MenuExit</sprite>
+      <sprite>sprites\spr_MenuStatus</sprite>
+      <sprite>sprites\spr_MenuW1</sprite>
+      <sprite>sprites\spr_MenuW2</sprite>
+      <sprite>sprites\spr_MenuW3</sprite>
+      <sprite>sprites\spr_MenuInventory</sprite>
+      <sprite>sprites\spr_MenuDarken</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background">
     <background>background\background0</background>
@@ -77,6 +88,16 @@
       <object>objects\obj_PlayerIon1</object>
       <object>objects\obj_PlayerMissile1</object>
       <object>objects\obj_Pulse1</object>
+    </objects>
+    <objects name="Menu">
+      <object>objects\obj_LoadMenu</object>
+      <object>objects\obj_MenuExit</object>
+      <object>objects\obj_MenuStatus</object>
+      <object>objects\obj_MenuInventory</object>
+      <object>objects\obj_MenuW1</object>
+      <object>objects\obj_MenuW2</object>
+      <object>objects\obj_MenuW3</object>
+      <object>objects\obj_MenuDarken</object>
     </objects>
   </objects>
   <rooms name="rooms">

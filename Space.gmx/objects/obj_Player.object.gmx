@@ -40,14 +40,16 @@ enemiesWithinRange = 0;
 
 menuCounter = 15;
 
+menuStop = 0;
+
 EnemyList = ds_list_create(); 
 
 path = path_add(); // create new path index to be used
 
 // Stats and Mechanics
 
-hp = 100;
-max_hp = 100;
+hp = 10;
+max_hp = 10;
 </string>
           </argument>
         </arguments>
@@ -73,6 +75,29 @@ max_hp = 100;
             <string>if (path_exists(path)) {
     path_delete(path);
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>menuStop = 0;
 </string>
           </argument>
         </arguments>
@@ -116,25 +141,31 @@ else { // player orientation = direction
         image_angle = direction;
     }
 }
-    
+
 if (isMoving == false &amp;&amp; turnBegin == 1) {
 
     if (mouse_check_button_pressed(mb_left)) {
         
+        // if clicking on self, do nothing (holding on self covered in another event - opening menu)
         if (mouse_x &gt; bbox_left &amp;&amp; mouse_x &lt; bbox_right &amp;&amp; mouse_y &gt; bbox_top &amp;&amp; mouse_y &lt; bbox_bottom) {
             exit;
         }
         
         // if clicking on a square outside the player's CURRENT vision and not previously explored, do nothing
-        // if clicking on a previously explored tile UNDER a UI element, only do the UI stuff (don't move)
         clickedFog = instance_position(mouse_x, mouse_y, obj_Fog);
         if (clickedFog.currentVision == 0 &amp;&amp; clickedFog.stayLight == 0) {
             exit;
         }
+        
+        // if clicking on a previously explored tile UNDER a UI element, only do the UI stuff (don't move)
         else {
             if (instance_position(mouse_x, mouse_y, obj_ParentUI)) {
                 exit;
             }
+        }
+        
+        if (menuStop == 1) {
+            exit;
         }
         
         mx = (mouse_x + 16 &amp; $ffffffe0);
@@ -259,6 +290,69 @@ if (enemiesWithinRange == 0) {
         </arguments>
       </action>
     </event>
+    <event eventtype="6" enumb="11">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>// if mouse cursor leaves obj_Player, reset menuCounter
+if (menuCounter &gt; 0) {
+
+    with (obj_LoadMenu) {
+        instance_destroy();
+    }
+    
+    menuCounter = 15;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="6" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>// if LMB is released before menuCounter reaches 0, reset menuCounter
+
+if (menuCounter &gt; 0) {
+
+    with (obj_LoadMenu) {
+        instance_destroy();
+    }    
+
+    menuCounter = 15;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="6" enumb="0">
       <action>
         <libid>1</libid>
@@ -278,11 +372,25 @@ if (enemiesWithinRange == 0) {
             <kind>1</kind>
             <string>menuCounter -= 1;
 
-if (menuCounter == 0) {
-    show_message("menu");
-    menuCounter = 15;
+if (!instance_exists(obj_MenuExit)) {
+    instance_create(x, y, obj_LoadMenu);
 }
 
+// if LMB has been held long enough on obj_Player, load the menu
+if (menuCounter == 0 &amp;&amp; !instance_exists(obj_MenuExit)) {
+    
+    with (obj_LoadMenu) {
+        instance_destroy();
+    }
+
+    instance_create(x, y-32, obj_MenuExit);
+    instance_create(x-32, y-16, obj_MenuStatus);
+    instance_create(x+32, y-16, obj_MenuInventory);
+    instance_create(x-32, y+16, obj_MenuW1);
+    instance_create(x, y+32, obj_MenuW2);
+    instance_create(x+32, y+16, obj_MenuW3);
+    menuCounter = 15;
+}
 </string>
           </argument>
         </arguments>
@@ -305,9 +413,7 @@ if (menuCounter == 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>newEnemy = instance_create((28*32)+64, (28*32)+64, obj_E1);
-mp_grid_add_cell(obj_PathController.mpGrid, 28, 28);
-
+            <string>menuStop = 0;
 </string>
           </argument>
         </arguments>
