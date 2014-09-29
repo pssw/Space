@@ -38,11 +38,13 @@ enemyGen = 0;
 
 enemiesWithinRange = 0;
 
-menuCounter = 15;
+menuCounter = 15; // amount of frames to hold LMB before menu appears
 
-menuStop = 0;
+menuStop = 0; // 0 = Menu inactive, Player can move
+              // 1 = Menu currently active, Player cannot move
 
-EnemyList = ds_list_create(); 
+EnemyList = ds_list_create(); // list of enemies within Player range
+                              // combine enemiesWithinRange? = ds_list_size(EnemyList)
 
 path = path_add(); // create new path index to be used
 
@@ -50,6 +52,8 @@ path = path_add(); // create new path index to be used
 
 hp = 10;
 max_hp = 10;
+
+currentWeapon = 1;
 </string>
           </argument>
         </arguments>
@@ -124,7 +128,6 @@ max_hp = 10;
 if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
     instance_create(0, 0, obj_EnemyGen);
     enemyGen = 1;
-    //show_message("random enemies generated");
 }
 
 if (start == 0) {  // original orientation UP
@@ -158,6 +161,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         }
         
         // if clicking on a previously explored tile UNDER a UI element, only do the UI stuff (don't move)
+        // this was used for Target Button (removed) but may be useful for other purposes
         else {
             if (instance_position(mouse_x, mouse_y, obj_ParentUI)) {
                 exit;
@@ -216,43 +220,32 @@ else {
         isMoving = false;
         for (i = 0; i &lt; instance_number(obj_E1); i += 1) {  // for each instance of the enemy object
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
-            if (distance_to_object(enemy) &lt; 64) {
+            if (distance_to_object(enemy) &lt; 64) {           // if the enemy is within player's range (change 64 to variable later)
                 if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range
                 
                 }
-                else {  // if the enemy instance came into range after the player moved
-                    if (!instance_exists(obj_TargetButton)) {
-                        targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
-                        weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
-                        weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
-                        weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
-                        instance_create(enemy.x, enemy.y, obj_TargetReticle);
-                    }
+                else {  // if the enemy instance came into range after the player moved 
                     enemy.EnemyInRange = 1;      // enemy is now in range
                     
                     // add the enemy to the list
                     needToAdd = ds_list_find_index(EnemyList, enemy);
                     if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
                         ds_list_add(EnemyList, enemy);
-                        enemiesWithinRange += 1;
-                        show_message("addedByPlayer");
-                        obj_TargetButton.increment += 1;
+                        // enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
+                        show_message("Player sighted the enemy");
                     }
                 }
             }
-            else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but left)
+            else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but player moved away)
                 if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
                     enemy.EnemyInRange = 0;
                     
                     // find the index of the enemy from the list and delete it
-                    enemyIndex = ds_list_find_index(EnemyList, enemy);
-                    if (enemyIndex &gt; -1) { // if the enemy still exists in EnemyList
-                        ds_list_delete(EnemyList, enemyIndex);
-                        enemiesWithinRange -= 1;
-                        show_message("deletedByPlayer");
-                        if (obj_TargetButton.increment == enemyIndex) {
-                            obj_TargetButton.increment += 1;
-                        }
+                    needToDelete = ds_list_find_index(EnemyList, enemy);
+                    if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
+                        ds_list_delete(EnemyList, needToDelete);
+                        // enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
+                        show_message("Player moved out of range");
                     }
                 }
                 else { // enemy was never in range, do nothing
@@ -265,26 +258,6 @@ else {
         obj_TurnController.EnemyCounter = 1;
     }
 }
-
-// only remove the TargetButton if there are NO enemies remaining in range
-if (enemiesWithinRange == 0) {
-    if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
-        with (obj_TargetButton) {                // so if the target is out of range, destroy the button
-            instance_destroy();
-        }
-        with (obj_W1) {                // so if the target is out of range, destroy the button
-            instance_destroy();
-        }
-        with (obj_W2) {                // so if the target is out of range, destroy the button
-            instance_destroy();
-        }
-        with (obj_W3) {                // so if the target is out of range, destroy the button
-            instance_destroy();
-        }
-    }
-}
-
-
 </string>
           </argument>
         </arguments>
@@ -370,26 +343,29 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>menuCounter -= 1;
+            <string>if (isMoving == false) {
 
-if (!instance_exists(obj_MenuExit)) {
-    instance_create(x, y, obj_LoadMenu);
-}
-
-// if LMB has been held long enough on obj_Player, load the menu
-if (menuCounter == 0 &amp;&amp; !instance_exists(obj_MenuExit)) {
+    menuCounter -= 1;
     
-    with (obj_LoadMenu) {
-        instance_destroy();
+    if (!instance_exists(obj_MenuExit)) {
+        instance_create(x, y, obj_LoadMenu);
     }
-
-    instance_create(x, y-32, obj_MenuExit);
-    instance_create(x-32, y-16, obj_MenuStatus);
-    instance_create(x+32, y-16, obj_MenuInventory);
-    instance_create(x-32, y+16, obj_MenuW1);
-    instance_create(x, y+32, obj_MenuW2);
-    instance_create(x+32, y+16, obj_MenuW3);
-    menuCounter = 15;
+    
+    // if LMB has been held long enough on obj_Player, load the menu
+    if (menuCounter == 0 &amp;&amp; !instance_exists(obj_MenuExit)) {
+        
+        with (obj_LoadMenu) {
+            instance_destroy();
+        }
+    
+        instance_create(x, y-32, obj_MenuExit);
+        instance_create(x-32, y-16, obj_MenuStatus);
+        instance_create(x+32, y-16, obj_MenuInventory);
+        instance_create(x-32, y+16, obj_MenuW1);
+        instance_create(x, y+32, obj_MenuW2);
+        instance_create(x+32, y+16, obj_MenuW3);
+        menuCounter = 15;
+    }
 }
 </string>
           </argument>
@@ -413,7 +389,7 @@ if (menuCounter == 0 &amp;&amp; !instance_exists(obj_MenuExit)) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>menuStop = 0;
+            <string>show_message(ds_list_size(EnemyList));
 </string>
           </argument>
         </arguments>

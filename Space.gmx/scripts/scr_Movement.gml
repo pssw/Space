@@ -1,7 +1,7 @@
 // scr_mp_grid_free(obj_PathController.mpGrid, x, y);
 
-// scr_Movement(range)
-// This script can be used for Enemy Movement with range 2
+// scr_Movement(range) outputs an array [x, y] which is the next movement location of the object
+// This script can be used for Enemy Movement with range 12
 /*
 | x | x |12| x | x |
 | x | 6 |7 | 8 | x |

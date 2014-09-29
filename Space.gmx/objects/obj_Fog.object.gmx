@@ -199,7 +199,7 @@ currentVision = 0;
     }
     //this draws semi-transparent fog 2 squares around the player
     if (distance_to_object(obj_LightenParent) &gt;= 32 &amp;&amp; (distance_to_object(obj_LightenParent) &lt; 64)) {
-        draw_set_alpha(0); //.4
+        draw_set_alpha(0); //.4, switch to 0 for debug
         draw_rectangle(x+16,y+16,x-16,y-16,false);
         draw_set_alpha(1);
         currentVision = 1;
@@ -208,7 +208,7 @@ currentVision = 0;
     
     //this draws black thick fog (no alpha transparency)
     if (distance_to_object(obj_LightenParent) &gt;= 64) {
-        draw_set_alpha(0); // 1
+        draw_set_alpha(0); // 1, switch to 0 for debug
         draw_rectangle(x+16,y+16,x-16,y-16,false);
         draw_set_alpha(1);
         currentVision = 0;
@@ -218,7 +218,7 @@ currentVision = 0;
 else { // previously explored fog
     //this tracks the player's previous LoS
     if (distance_to_object(obj_LightenParent) &gt;= 64) {
-        draw_set_alpha(0); // .2
+        draw_set_alpha(0); // .2, switch to 0 for debug
         draw_set_color(c_navy);
         draw_rectangle(x+16,y+16,x-16,y-16,false)
         draw_set_alpha(1);

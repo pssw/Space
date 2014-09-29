@@ -31,8 +31,7 @@ image_speed = 0;
 
 start = 0;
 
-EnemyInRange = 0;
-PlayerInRange = 0;
+EnemyInRange = 0;  // 1 when in range of Player
 
 turnBegin = 0; // 1 = Enemy can move
                // 0 = Player can move
@@ -50,7 +49,8 @@ max_hp = 3;
 range = 12; // there are 12 squares + current square (0-12) within distance of 2 of Enemy
             // corners don't count (check scr_Movement diagram)
            
-setNewReticle = 0;
+
+// setNewReticle = 0; Reticle mechanics removed
 </string>
           </argument>
         </arguments>
@@ -79,14 +79,17 @@ setNewReticle = 0;
 
 mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
+/*
+// Reticle mechanics removed
 // when destroyed, if there are still enemies in range, 
 // create a new target reticle at the next enemy
 if (!ds_list_empty(obj_Player.EnemyList)) {
     var enemy = ds_list_find_value(obj_Player.EnemyList, 0);
     instance_create(enemy.x, enemy.y, obj_TargetReticle);
 }
+*/
 
-obj_Player.enemiesWithinRange -= 1;
+// obj_Player.enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
 </string>
           </argument>
         </arguments>
@@ -133,10 +136,12 @@ if (hp &lt;= 0) {
     removeEnemy = ds_list_find_index(obj_Player.EnemyList, id);
     ds_list_delete(obj_Player.EnemyList, removeEnemy);
     
+    /* Target Button mechanic removed
     // increment the EnemyList index by 1
     if (obj_TargetButton.increment == removeEnemy) {
         obj_TargetButton.increment += 1;
     }
+    */
     
     // remove the enemy from the overall enemy unit turn order
     removeEnemyTurn = ds_list_find_index(obj_TurnController.EnemyTurnList, id);
@@ -153,6 +158,7 @@ if (hp &lt;= 0) {
 // Movement AI
 if (isMoving == false &amp;&amp; turnBegin == 1) {
     // add IF clause for when Player is within range later
+    // do this BEFORE checking movement
     
     // declare and set targetx and targety as the coordinates where the enemy will go
     // use script to see if that square is empty
@@ -163,16 +169,19 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
     mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so enemy can move
     if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
     
-        if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move), check to shoot
-            // do a check if Player is within range -&gt; if so, shoot
+        if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move)
+            // technically should never arrive here after shooting since enemy cannot move after shooting
+            // can arrive here if player wasn't in range (not shootable) and scr_Movement returned a TargetArray with the same current location
             mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
             turnBegin = 0;
         }
-        else {
+        else { // if enemy moves to a different location
+            /* Reticle mechanics removed
             if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
                 setNewReticle = 1;
             }
-        
+            */
+            
             isMoving = true;
             image_speed = 0.5;
             start = 1;
@@ -215,13 +224,16 @@ else {
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         isMoving = false;
         
+        /* Reticle mechanics removed
         if (setNewReticle == 1) {
             instance_create(TargetArray[0], TargetArray[1], obj_TargetReticle);
             setNewReticle = 0;
         }
+        */
         
         if (distance_to_object(obj_Player) &lt; 64) { // after enemy moved, player is in range
-                
+            
+            /* Target button mechanics removed
             if (!instance_exists(obj_TargetButton)) {
                 targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
                 weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
@@ -229,15 +241,17 @@ else {
                 weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
                 instance_create(x, y, obj_TargetReticle);
             }
-            EnemyInRange = 1;      // enemy is now in range
+            */
+            
+            EnemyInRange = 1;      // enemy is now in range of Player
             
             // add the enemy to the list
             needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
             if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
                 ds_list_add(obj_Player.EnemyList, id);
-                obj_Player.enemiesWithinRange += 1;
+                // obj_Player.enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
                 show_message("addedByEnemy");
-                obj_TargetButton.increment += 1;
+                // obj_TargetButton.increment += 1; Target mechanics removed
             }
         }
         else { // after enemy moved, player is out of range
@@ -247,11 +261,13 @@ else {
             needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
             if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
                 ds_list_delete(obj_Player.EnemyList, needToDelete);
-                obj_Player.enemiesWithinRange -= 1;
+                // obj_Player.enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
                 show_message("deletedByEnemy");
+                /* Target mechanics removed
                 if (obj_TargetButton.increment == id) {
                     obj_TargetButton.increment += 1;
                 }
+                */
             }
         }
         turnBegin = 0;
@@ -259,6 +275,7 @@ else {
     }
 }
 
+/* Target mechanics removed
 // only remove the TargetButton if there are NO enemies remaining in range
 if (obj_Player.enemiesWithinRange == 0) {
     if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
@@ -276,7 +293,7 @@ if (obj_Player.enemiesWithinRange == 0) {
         }
     }
 }
-
+*/
 
 </string>
           </argument>
@@ -302,7 +319,8 @@ if (obj_Player.enemiesWithinRange == 0) {
             <kind>1</kind>
             <string>// only allow player to left-click on enemy when it's his turn
 if (obj_Player.turnBegin == 1) {
-
+    
+    /* Reticle mechanics removed
     // if the enemy doesn't have a reticle on them, 
     // destroy the current reticle and create a new one at the current enemy
     if (!instance_position(x, y, obj_TargetReticle)) {
@@ -317,6 +335,10 @@ if (obj_Player.turnBegin == 1) {
         obj_TargetButton.increment = ds_list_find_index(obj_Player.EnemyList, id);
         
     }
+    */
+    
+    // implement shooting with current weapon
+    
 }
 </string>
           </argument>
