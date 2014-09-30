@@ -33,9 +33,6 @@ build = 0
 
 // if currentVision = 1, the player can move to that location
 currentVision = 0;
-
-// if lastPath = 1, the Fog tile was entered by obj_Player and will be added to obj_Player.lastMoved
-lastPath = 0;
 </string>
           </argument>
         </arguments>
@@ -168,12 +165,15 @@ lastPath = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// if Player enters Fog tile, add it to Player's lastMoved ds_list
+            <string>/*
+// Updated to function in obj_Player via mp_grid and Path points
+// if Player enters Fog tile, add it to Player's lastMoved ds_list
 if (lastPath == 0) {
     var coord = string((x/32)-2) + "," + string((y/32)-2);
     ds_list_add(obj_Player.lastMoved, coord);
     lastPath = 1;
 }
+*/
 </string>
           </argument>
         </arguments>

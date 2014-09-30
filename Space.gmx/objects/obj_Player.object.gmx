@@ -196,6 +196,15 @@ if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &a
             sprite_index = spr_Player;
             image_speed = 0.5;
             start = 1;
+            
+            // get the length (number of points) in the path
+            var pathLength = path_get_number(path);
+            // for each point, get the mp_grid coordinates and add it to the Player's lastMoved list
+            for (var i = 0; i &lt; pathLength; i++) {
+                var coord = string(path_get_point_x(path, i)/32 - 2) + "," + string(path_get_point_y(path, i)/32 - 2);
+                ds_list_add(obj_Player.lastMoved, coord);
+            }
+            
             path_start(path, 3, 0, true);
         }
         else { // prevents own cell from clearing if clicking on enemy
