@@ -37,6 +37,7 @@ mpGrid = mp_grid_create(48, 48, 29, 29, 32, 32); // create a new grid for this r
 
 // original 31x31
 // mpGrid = mp_grid_create(16, 16, 31, 31, 32, 32); // create a new grid for this room
+
 </string>
           </argument>
         </arguments>

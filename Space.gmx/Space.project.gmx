@@ -52,8 +52,10 @@
   <scripts name="scripts">
     <script>scripts\scr_Device_Room_Scale.gml</script>
     <script>scripts\scr_Movement.gml</script>
-    <script>scripts\scr_Check_Player_Adj.gml</script>
+    <script>scripts\scr_EnemyPath.gml</script>
     <script>scripts\scr_mp_grid_free.gml</script>
+    <script>scripts\scr_Player_Shoot.gml</script>
+    <script>scripts\scr_Level_Up.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">

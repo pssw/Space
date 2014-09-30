@@ -38,6 +38,8 @@ turnBegin = 0; // 1 = Enemy can move
 
 path_E1 = path_add(); // create new path index to be used
 
+shotLimiter = 0;
+
 // this is already done in obj_EnemyGen.Create
 // mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
@@ -48,7 +50,10 @@ max_hp = 3;
 
 range = 12; // there are 12 squares + current square (0-12) within distance of 2 of Enemy
             // corners don't count (check scr_Movement diagram)
-           
+
+for (var i = 0; i &lt;= range; i += 1) {
+    weightedMove[i] = 0;
+}
 
 // setNewReticle = 0; Reticle mechanics removed
 </string>
@@ -77,7 +82,9 @@ range = 12; // there are 12 squares + current square (0-12) within distance of 2
     path_delete(path_E1);
 }
 
-mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+obj_Player.xp += 10;
+
+// mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
 /*
 // Reticle mechanics removed
@@ -146,6 +153,7 @@ if (hp &lt;= 0) {
     // remove the enemy from the overall enemy unit turn order
     removeEnemyTurn = ds_list_find_index(obj_TurnController.EnemyTurnList, id);
     ds_list_delete(obj_TurnController.EnemyTurnList, removeEnemyTurn);
+    mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
     
     turnBegin = 0;
     
@@ -157,40 +165,50 @@ if (hp &lt;= 0) {
 
 // Movement AI
 if (isMoving == false &amp;&amp; turnBegin == 1) {
-    // add IF clause for when Player is within range later
-    // do this BEFORE checking movement
     
-    // declare and set targetx and targety as the coordinates where the enemy will go
-    // use script to see if that square is empty
-    TargetArray = scr_Movement(range);
-    
-    // old: mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
-    // after extending the outer border from 1 to 2 cells, shift mp_grid operations by 2 to compensate
-    mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so enemy can move
-    if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
-    
-        if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move)
-            // technically should never arrive here after shooting since enemy cannot move after shooting
-            // can arrive here if player wasn't in range (not shootable) and scr_Movement returned a TargetArray with the same current location
-            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
-            turnBegin = 0;
+    // if the Player is in range of enemy, shoot and end turn
+    if (EnemyInRange == 1) {
+        if (shotLimiter == 0) {
+            obj_Player.enemyShooting = 1;
+            shotLimiter = 1;
+            shot = instance_create(x, y, obj_Pulse1);
         }
-        else { // if enemy moves to a different location
-            /* Reticle mechanics removed
-            if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
-                setNewReticle = 1;
-            }
-            */
-            
-            isMoving = true;
-            image_speed = 0.5;
-            start = 1;
-            path_start(path_E1, 3, 0, true);
-        }
-        
+        turnBegin = 0;
     }
-    else { // prevents own cell from clearing if clicking on enemy (check if needed for Enemy paths)
-        mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
+    // if the Player is not in range of enemy, complete movement
+    else {
+        // declare and set targetx and targety as the coordinates where the enemy will go
+        // use script to see if that square is empty
+        TargetArray = scr_Movement(range);
+        
+        // old: mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
+        // after extending the outer border from 1 to 2 cells, shift mp_grid operations by 2 to compensate
+        mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so enemy can move
+        if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
+        
+            if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move)
+                // technically should never arrive here after shooting since enemy cannot move after shooting
+                // can arrive here if player wasn't in range (not shootable) and scr_Movement returned a TargetArray with the same current location
+                mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
+                turnBegin = 0;
+            }
+            else { // if enemy moves to a different location
+                /* Reticle mechanics removed
+                if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
+                    setNewReticle = 1;
+                }
+                */
+                
+                isMoving = true;
+                image_speed = 0.5;
+                start = 1;
+                path_start(path_E1, 3, 0, true);
+            }
+            
+        }
+        else { // prevents own cell from clearing if clicking on enemy (check if needed for Enemy paths)
+            mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
+        }
     } 
 }
 else {
@@ -300,6 +318,29 @@ if (obj_Player.enemiesWithinRange == 0) {
         </arguments>
       </action>
     </event>
+    <event eventtype="6" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_message(shotLimiter);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="6" enumb="4">
       <action>
         <libid>1</libid>
@@ -318,7 +359,7 @@ if (obj_Player.enemiesWithinRange == 0) {
           <argument>
             <kind>1</kind>
             <string>// only allow player to left-click on enemy when it's his turn
-if (obj_Player.turnBegin == 1) {
+if (obj_Player.turnBegin == 1) &amp;&amp; (EnemyInRange == 1) {
     
     /* Reticle mechanics removed
     // if the enemy doesn't have a reticle on them, 
@@ -338,6 +379,7 @@ if (obj_Player.turnBegin == 1) {
     */
     
     // implement shooting with current weapon
+    scr_Player_Shoot(obj_Player.currentWeapon);
     
 }
 </string>

@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>speed = 4;
-
+    
 direction = point_direction(x, y, obj_Player.x, obj_Player.y);
 image_angle = direction - 90;
 </string>
@@ -57,6 +57,7 @@ image_angle = direction - 90;
         hp -= 1;
     }
     // destroy bullet
+    obj_Player.enemyShooting = 0;
     instance_destroy();
 }
 </string>
