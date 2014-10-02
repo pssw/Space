@@ -17,6 +17,7 @@
     </sprites>
     <sprites name="Line of Sight">
       <sprite>sprites\spr_Fog</sprite>
+      <sprite>sprites\spr_NodeTracer</sprite>
       <sprites name="old">
         <sprite>sprites\spr_LoS2</sprite>
         <sprite>sprites\spr_LoS2FIX</sprite>
@@ -56,6 +57,7 @@
     <script>scripts\scr_mp_grid_free.gml</script>
     <script>scripts\scr_Player_Shoot.gml</script>
     <script>scripts\scr_Level_Up.gml</script>
+    <script>scripts\scr_Range_Setup.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">
@@ -73,11 +75,7 @@
       <object>objects\obj_PathController</object>
       <object>objects\obj_TurnController</object>
       <object>objects\obj_EnemyGen</object>
-      <objects name="old">
-        <object>objects\obj_FogOfWar</object>
-        <object>objects\obj_LoS2</object>
-        <object>objects\obj_LoS2Fix</object>
-      </objects>
+      <object>objects\obj_NodeTracer</object>
     </objects>
     <objects name="Enemies">
       <object>objects\obj_E1</object>

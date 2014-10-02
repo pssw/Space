@@ -50,7 +50,11 @@ EnemyList = ds_list_create(); // list of enemies within Player range
 
 path = path_add(); // create new path index to be used
 
-lastMoved = ds_list_create();
+// initial values for pathArray
+pathArray[0, 0] = (x/32 - 2);
+pathArray[0, 1] = (y/32 - 2);
+
+LineOfSight = scr_Range_Setup(x,y);
 
 // Stats and Mechanics
 
@@ -164,7 +168,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &a
             exit;
         }
         
-        // if clicking on a square outside the player's CURRENT vision do nothing
+        // if clicking on a square outside the player's CURRENT vision, do nothing
         // TODO: allow moving to previously explored areas even if outside range (fast-forward until enemy is found)
         clickedFog = instance_position(mouse_x, mouse_y, obj_Fog);
         if (clickedFog.currentVision == 0) {
@@ -190,7 +194,7 @@ if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &a
         if (mp_grid_path(obj_PathController.mpGrid, path, x, y, mx, my, true)) { // if a path was created, start path
             
             // clear the list of tiles the player last entered
-            ds_list_clear(obj_Player.lastMoved);
+            pathArray = 0;
             
             isMoving = true;
             sprite_index = spr_Player;
@@ -201,11 +205,16 @@ if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &a
             var pathLength = path_get_number(path);
             // for each point, get the mp_grid coordinates and add it to the Player's lastMoved list
             for (var i = 0; i &lt; pathLength; i++) {
-                var coord = string(path_get_point_x(path, i)/32 - 2) + "," + string(path_get_point_y(path, i)/32 - 2);
-                ds_list_add(obj_Player.lastMoved, coord);
+                pathArray[i, 0] = (path_get_point_x(path, i)/32 - 2);
+                pathArray[i, 1] = (path_get_point_y(path, i)/32 - 2);
+                
+                if ((i != 0) /*&amp;&amp; (i != pathLength - 1)*/) {
+                    instance_create(path_get_point_x(path, i), path_get_point_y(path, i), obj_NodeTracer);
+                }
             }
             
             path_start(path, 3, 0, true);
+            
         }
         else { // prevents own cell from clearing if clicking on enemy
             mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
@@ -213,6 +222,14 @@ if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &a
     }
 }
 else {
+    if (place_meeting(x, y, obj_NodeTracer)) {
+        testid = obj_NodeTracer.id;
+        LineOfSight = scr_Range_Setup(testid.x, testid.y);
+        
+        with (testid) {
+            instance_destroy();
+        }
+    }
 
     if (path_position == 1 &amp;&amp; turnBegin == 1) {
         image_speed = 0;
@@ -257,7 +274,7 @@ else {
                     if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
                         ds_list_add(EnemyList, enemy);
                         // enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
-                        show_message("Player sighted the enemy");
+                        // show_message("Player sighted the enemy");
                     }
                 }
             }
@@ -270,7 +287,7 @@ else {
                     if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
                         ds_list_delete(EnemyList, needToDelete);
                         // enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
-                        show_message("Player moved out of range");
+                        // show_message("Player moved out of range");
                     }
                 }
                 else { // enemy was never in range, do nothing
@@ -278,6 +295,7 @@ else {
                 }
             }
         }
+        //LineOfSight = scr_Range_Setup(x,y);
         turnBegin = 0;
         obj_TurnController.EnemyCounter = 1;
     }
@@ -415,8 +433,9 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>for (var i = 0; i &lt; ds_list_size(lastMoved); i++) {
-    show_message(ds_list_find_value(lastMoved, i));
+            <string>for (var i = 0; i &lt; array_height_2d(pathArray); i++) {
+    var z = string(pathArray[i, 0]) + ", " + string(pathArray[i, 1])
+    show_message(z);
 }
 </string>
           </argument>

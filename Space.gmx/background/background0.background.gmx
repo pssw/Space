@@ -4,7 +4,7 @@
   <tilewidth>96</tilewidth>
   <tileheight>96</tileheight>
   <tilexoff>0</tilexoff>
-  <tileyoff>0</tileyoff>
+  <tileyoff>1</tileyoff>
   <tilehsep>0</tilehsep>
   <tilevsep>0</tilevsep>
   <HTile>-1</HTile>

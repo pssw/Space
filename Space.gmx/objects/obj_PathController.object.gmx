@@ -25,7 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Initialize controller
+            <string>image_speed = 0;
+
+/// Initialize controller
 if (instance_number(object_index) &gt; 1) {
 // prevent there from being more than one controller
   instance_destroy();
