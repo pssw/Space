@@ -262,36 +262,43 @@ else {
         isMoving = false;
         for (i = 0; i &lt; instance_number(obj_E1); i += 1) {  // for each instance of the enemy object
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
-            if (distance_to_object(enemy) &lt; 64) {           // if the enemy is within player's range (change 64 to variable later)
-                if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range
-                
-                }
-                else {  // if the enemy instance came into range after the player moved 
-                    enemy.EnemyInRange = 1;      // enemy is now in range
+            
+            for (var j = 0; j &lt; array_height_2d(LineOfSight); j++) {
+            
+                if ((((enemy.x/32)-2) == LineOfSight[j, 0]) &amp;&amp; (((enemy.y/32)-2) == LineOfSight[j, 1])){ // if the enemy is within player's range
+            
+                // if (distance_to_object(enemy) &lt; 64) {           // if the enemy is within player's range
+                    if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range
                     
-                    // add the enemy to the list
-                    needToAdd = ds_list_find_index(EnemyList, enemy);
-                    if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
-                        ds_list_add(EnemyList, enemy);
-                        // enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
-                        // show_message("Player sighted the enemy");
                     }
-                }
-            }
-            else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but player moved away)
-                if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
-                    enemy.EnemyInRange = 0;
-                    
-                    // find the index of the enemy from the list and delete it
-                    needToDelete = ds_list_find_index(EnemyList, enemy);
-                    if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
-                        ds_list_delete(EnemyList, needToDelete);
-                        // enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
-                        // show_message("Player moved out of range");
+                    else {  // if the enemy instance came into range after the player moved 
+                        enemy.EnemyInRange = 1;      // enemy is now in range
+                        
+                        // add the enemy to the list
+                        needToAdd = ds_list_find_index(EnemyList, enemy);
+                        if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
+                            ds_list_add(EnemyList, enemy);
+                            // enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
+                            // show_message("Player sighted the enemy");
+                        }
                     }
+                    break;
                 }
-                else { // enemy was never in range, do nothing
-
+                else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but player moved away)
+                    if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
+                        enemy.EnemyInRange = 0;
+                        
+                        // find the index of the enemy from the list and delete it
+                        needToDelete = ds_list_find_index(EnemyList, enemy);
+                        if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
+                            ds_list_delete(EnemyList, needToDelete);
+                            // enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
+                            // show_message("Player moved out of range");
+                        }
+                    }
+                    else { // enemy was never in range, do nothing
+    
+                    }
                 }
             }
         }
@@ -370,6 +377,32 @@ if (menuCounter &gt; 0) {
         </arguments>
       </action>
     </event>
+    <event eventtype="6" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>for (var i = 0; i &lt; array_height_2d(pathArray); i++) {
+    var z = string(pathArray[i, 0]) + ", " + string(pathArray[i, 1])
+    show_message(z);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="6" enumb="0">
       <action>
         <libid>1</libid>
@@ -410,32 +443,6 @@ if (menuCounter &gt; 0) {
         instance_create(x+32, y+16, obj_MenuW3);
         menuCounter = 15;
     }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="18">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>for (var i = 0; i &lt; array_height_2d(pathArray); i++) {
-    var z = string(pathArray[i, 0]) + ", " + string(pathArray[i, 1])
-    show_message(z);
 }
 </string>
           </argument>

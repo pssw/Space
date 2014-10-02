@@ -220,6 +220,10 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
 }
 else {
     if (path_position == 1 &amp;&amp; turnBegin == 1) {
+    
+        // refresh Range 
+        rangeArray = scr_Range_Setup(x, y);
+    
         image_speed = 0;
         if (round(direction) == 225) { // SW
             image_angle = 0;
@@ -256,47 +260,50 @@ else {
         }
         */
         
-        if (distance_to_object(obj_Player) &lt; 64) { // after enemy moved, player is in range
-            
-            /* Target button mechanics removed
-            if (!instance_exists(obj_TargetButton)) {
-                targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
-                weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
-                weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
-                weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
-                instance_create(x, y, obj_TargetReticle);
-            }
-            */
-            
-            EnemyInRange = 1;      // enemy is now in range of Player
-            
-            // add the enemy to the list
-            needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
-            if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
-                ds_list_add(obj_Player.EnemyList, id);
-                // obj_Player.enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
-                // show_message("addedByEnemy");
-                // obj_TargetButton.increment += 1; Target mechanics removed
-            }
-        }
-        else { // after enemy moved, player is out of range
+        for (var j = 0; j &lt; array_height_2d(rangeArray); j++) {
+        
+            if ((((obj_Player.x/32)-2) == rangeArray[j, 0]) &amp;&amp; (((obj_Player.y/32)-2) == rangeArray[j, 1])){ // after enemy moved, player is in range
 
-            EnemyInRange = 0;
-            // find the index of the enemy from the list and delete it
-            needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
-            if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
-                ds_list_delete(obj_Player.EnemyList, needToDelete);
-                // obj_Player.enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
-                // show_message("deletedByEnemy");
-                /* Target mechanics removed
-                if (obj_TargetButton.increment == id) {
-                    obj_TargetButton.increment += 1;
+                /* Target button mechanics removed
+                if (!instance_exists(obj_TargetButton)) {
+                    targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
+                    weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
+                    weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
+                    weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
+                    instance_create(x, y, obj_TargetReticle);
                 }
                 */
+                
+                EnemyInRange = 1;      // enemy is now in range of Player
+                
+                // add the enemy to the list
+                needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
+                if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
+                    ds_list_add(obj_Player.EnemyList, id);
+                    // obj_Player.enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
+                    // show_message("addedByEnemy");
+                    // obj_TargetButton.increment += 1; Target mechanics removed
+                }
+                break;
+            }
+            else { // after enemy moved, player is out of range
+    
+                EnemyInRange = 0;
+                // find the index of the enemy from the list and delete it
+                needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
+                if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
+                    ds_list_delete(obj_Player.EnemyList, needToDelete);
+                    // obj_Player.enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
+                    // show_message("deletedByEnemy");
+                    /* Target mechanics removed
+                    if (obj_TargetButton.increment == id) {
+                        obj_TargetButton.increment += 1;
+                    }
+                    */
+                }
             }
         }
-        // refresh Range 
-        rangeArray = scr_Range_Setup(x, y);
+        // refresh weights
         testArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
         turnBegin = 0;
         // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController

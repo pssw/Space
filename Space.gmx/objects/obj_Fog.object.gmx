@@ -33,10 +33,6 @@ build = 0
 
 // if currentVision = 1, the player can move to that location
 currentVision = 0;
-
-// if radius = 1, fog is N/E/S/W or on Player
-// if radius = 2, fog is NN/NW/NE/WW/EE/SW/SE/SS
-radius = 0
 </string>
           </argument>
         </arguments>
@@ -152,29 +148,6 @@ radius = 0
         <isnot>0</isnot>
       </action>
     </event>
-    <event eventtype="6" enumb="5">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>show_message(radius);
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="7" enumb="0">
       <action>
         <libid>1</libid>
@@ -235,7 +208,6 @@ if (stayLight == 0) {   // all original fog
         draw_set_alpha(1);
         stayLight = 1;
         currentVision = 1;
-        radius = 1;
     }
 
     //this draws semi-transparent fog 2 squares around the player
@@ -262,7 +234,6 @@ if (stayLight == 0) {   // all original fog
         draw_set_alpha(1);
         stayLight = 1;
         currentVision = 1;
-        radius = 2;
     }
     
     //this draws black thick fog (no alpha transparency)
@@ -280,7 +251,6 @@ if (stayLight == 0) {   // all original fog
         draw_rectangle(x+16,y+16,x-16,y-16,false);
         draw_set_alpha(1);
         currentVision = 0;
-        radius = 0;
     }
 
 }
@@ -312,7 +282,6 @@ else { // previously explored fog (stayLight = 1)
                 draw_rectangle(x+16,y+16,x-16,y-16,false)
                 draw_set_alpha(1);
                 draw_set_color(c_black);
-                radius = 0;
             }
         }
     }
@@ -330,7 +299,6 @@ else { // previously explored fog (stayLight = 1)
        ((((x/32)-2) == obj_Player.LineOfSight[7,0]) &amp;&amp; (((y/32)-2) == obj_Player.LineOfSight[7,1])) ||  // E
        ((((x/32)-2) == obj_Player.LineOfSight[10,0]) &amp;&amp; (((y/32)-2) == obj_Player.LineOfSight[10,1])) { // S
        currentVision = 1;
-       radius = 1;
     }
     
     //this draws semi-transparent fog 2 squares around the player
@@ -349,7 +317,6 @@ else { // previously explored fog (stayLight = 1)
        ((((x/32)-2) == obj_Player.LineOfSight[11,0]) &amp;&amp; (((y/32)-2) == obj_Player.LineOfSight[11,1])) ||  // SE
        ((((x/32)-2) == obj_Player.LineOfSight[12,0]) &amp;&amp; (((y/32)-2) == obj_Player.LineOfSight[12,1])) { // SS
        currentVision = 1;
-       radius = 2;
     }
     
 }
