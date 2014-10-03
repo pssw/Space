@@ -25,7 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>isMoving = false;
+            <string>// CHANGE TILE HOR: X = 1 in rm_Main (background) for mobile
+
+isMoving = false;
 
 image_speed = 0;
 
@@ -394,10 +396,8 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>for (var i = 0; i &lt; array_height_2d(pathArray); i++) {
-    var z = string(pathArray[i, 0]) + ", " + string(pathArray[i, 1])
-    show_message(z);
-}
+            <string>show_message(x/32-2);
+show_message(y/32-2);
 </string>
           </argument>
         </arguments>

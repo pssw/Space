@@ -1,4 +1,4 @@
-// scr_EnemyPath(rangeArray, pathArray) outputs an array [x, y] which is the next movement location of the object
+// scr_EnemyPath(rangeArray, pathArray) outputs a modified rangeArray whose tiles have a weight of 1 if Player was recently in them
 
 // rangeArray is a 13-element 2D-array: [0,0] = x coordinate of the tile 2 North of Enemy
 //                                      [0,1] = y coordinate of the tile 2 North of Enemy
@@ -19,15 +19,18 @@
 // compare each node in Player's path last turn (pathArray) to each node in enemy's range (rangeArray)
 // if any of them are the same, add 1 to the weight of the enemy's range tile
 
+var weightCounter = 1;
+
 for (var pathIndex = 0; pathIndex < array_height_2d(argument1); pathIndex++) {
     for (var rangeIndex = 0; rangeIndex < array_height_2d(argument0); rangeIndex++) {
         if (argument1[pathIndex, 0]) == argument0[rangeIndex, 0] && argument1[pathIndex, 1] == argument0[rangeIndex, 1] {
-            argument0[rangeIndex, 2] = 1;
+            argument0[rangeIndex, 2] = weightCounter;
+            weightCounter += 1;
             break;
         }
         else {
-            if (argument0[rangeIndex, 2] == 1) {
-
+            if (argument0[rangeIndex, 2] > 0) {
+            
             }
             else {
                 argument0[rangeIndex, 2] = 0;

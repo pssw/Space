@@ -169,6 +169,9 @@ if (hp &lt;= 0) {
 // Movement AI
 if (isMoving == false &amp;&amp; turnBegin == 1) {
     
+    weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
+    newCoord = scr_Weighted_Move(weightArray);
+
     // if the Player is in range of enemy, shoot and end turn
     if (EnemyInRange == 1) {
         if (shotLimiter == 0) {
@@ -176,17 +179,21 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             shotLimiter = 1;
             shot = instance_create(x, y, obj_Pulse1);
         }
-        testArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
+        weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
+        // newCoord = scr_Weighted_Move(weightArray);
         turnBegin = 0;
     }
     // if the Player is not in range of enemy, complete movement
     else {
     
-        testArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
+        weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
     
         // declare and set targetx and targety as the coordinates where the enemy will go
         // use script to see if that square is empty
         TargetArray = scr_Movement(range);
+        
+        // weightArray already contains the range of the Enemy (height of array), so new Movement script only needs the actual array
+        // newCoord = scr_Weighted_Move(weightArray);
         
         // old: mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
         // after extending the outer border from 1 to 2 cells, shift mp_grid operations by 2 to compensate
@@ -304,7 +311,7 @@ else {
             }
         }
         // refresh weights
-        testArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
+        weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
         turnBegin = 0;
         // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
     }
@@ -352,7 +359,25 @@ if (obj_Player.enemiesWithinRange == 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message(EnemyInRange);
+            <string>if (is_array(newCoord)) {
+    show_message(string(newCoord[0]) + "," + string(newCoord[1]));
+}
+else {
+    return newCoord;
+}
+
+/*
+for (var i = 0; i &lt; array_height_2d(newCoord); i++) {
+    show_message(string(newCoord[i,0]) + "," + string(newCoord[i,1]) + ": " + string(newCoord[i,2]));
+}
+
+/*
+for (var i = 0; i &lt; array_height_2d(weightArray); i++) {
+    if (weightArray[i, 2] &gt; 0) {
+        show_message(string(weightArray[i,0]) + "," + string(weightArray[i,1]) + ": " + string(weightArray[i,2]));
+    }
+}
+
 </string>
           </argument>
         </arguments>
