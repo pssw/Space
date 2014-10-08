@@ -15,7 +15,7 @@
 var testSquare;
 
 //switch (irandom(argument0)) {
-switch (irandom(1)) {
+switch (irandom(0)) {
     case 0:
         var target;
         target[0] = x;

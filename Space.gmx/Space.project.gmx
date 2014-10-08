@@ -80,6 +80,7 @@
     </objects>
     <objects name="Enemies">
       <object>objects\obj_E1</object>
+      <object>objects\obj_E1backup</object>
     </objects>
     <objects name="Mobile">
       <object>objects\obj_Devices_Room_Scale</object>

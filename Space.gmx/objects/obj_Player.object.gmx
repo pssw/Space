@@ -396,8 +396,7 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message(x/32-2);
-show_message(y/32-2);
+            <string>show_message(string(x/32-2) + "," + string(y/32-2));
 </string>
           </argument>
         </arguments>

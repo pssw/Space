@@ -105,30 +105,6 @@ if (!ds_list_empty(obj_Player.EnemyList)) {
         </arguments>
       </action>
     </event>
-    <event eventtype="2" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>//
-turnBegin = 0;
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
@@ -170,13 +146,23 @@ if (hp &lt;= 0) {
     removeEnemy = ds_list_find_index(obj_Player.EnemyList, id);
     ds_list_delete(obj_Player.EnemyList, removeEnemy);
     
+    /* Target Button mechanic removed
+    // increment the EnemyList index by 1
+    if (obj_TargetButton.increment == removeEnemy) {
+        obj_TargetButton.increment += 1;
+    }
+    */
+    
     // remove the enemy from the overall enemy unit turn order
     removeEnemyTurn = ds_list_find_index(obj_TurnController.EnemyTurnList, id);
     ds_list_delete(obj_TurnController.EnemyTurnList, removeEnemyTurn);
     mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
     
     turnBegin = 0;
-
+    
+    // change this later with the enemy array concept (all units in array finish before
+    // player's turn begins
+    // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
     instance_destroy();
 }
 
@@ -193,22 +179,39 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             shotLimiter = 1;
             shot = instance_create(x, y, obj_Pulse1);
         }
+        // weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray); // already called earlier, don't have to call again
+        // newCoord = scr_Weighted_Move(weightArray);
         turnBegin = 0;
     }
     // if the Player is not in range of enemy, complete movement
     else {
+    
+        // weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray); // already called earlier, don't have to call again
+    
+        // declare and set targetx and targety as the coordinates where the enemy will go
+        // use script to see if that square is empty
+        TargetArray = scr_Movement(range);
+        
+        // weightArray already contains the range of the Enemy (height of array), so new Movement script only needs the actual array
+        // newCoord = scr_Weighted_Move(weightArray);
+        
         // old: mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
         // after extending the outer border from 1 to 2 cells, shift mp_grid operations by 2 to compensate
         mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // clear current cell so enemy can move
-        if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, ((newCoord[0]+2)*32), ((newCoord[1]+2)*32), true)) { // if a path was created, start path        
+        if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, (TargetArray[0]), (TargetArray[1]), true)) { // if a path was created, start path        
         
-            if ((x == ((newCoord[0]+2)*32)) &amp;&amp; (y = ((newCoord[1]+2)*32))) { // if enemy decides not to move (or cannot move)
+            if ((x == TargetArray[0]) &amp;&amp; (y = TargetArray[1])) { // if enemy decides not to move (or cannot move)
                 // technically should never arrive here after shooting since enemy cannot move after shooting
-                // can arrive here if player wasn't in range (not shootable) and scr_Weighted_Move returned a coordinate with the same current location
+                // can arrive here if player wasn't in range (not shootable) and scr_Movement returned a TargetArray with the same current location
                 mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
                 turnBegin = 0;
             }
             else { // if enemy moves to a different location
+                /* Reticle mechanics removed
+                if (instance_position(x, y, obj_TargetReticle)) { // if that enemy instance was in the reticle
+                    setNewReticle = 1;
+                }
+                */
                 
                 isMoving = true;
                 image_speed = 0.5;
@@ -257,9 +260,26 @@ else {
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         isMoving = false;
         
+        /* Reticle mechanics removed
+        if (setNewReticle == 1) {
+            instance_create(TargetArray[0], TargetArray[1], obj_TargetReticle);
+            setNewReticle = 0;
+        }
+        */
+        
         for (var j = 0; j &lt; array_height_2d(rangeArray); j++) {
         
             if ((((obj_Player.x/32)-2) == rangeArray[j, 0]) &amp;&amp; (((obj_Player.y/32)-2) == rangeArray[j, 1])){ // after enemy moved, player is in range
+
+                /* Target button mechanics removed
+                if (!instance_exists(obj_TargetButton)) {
+                    targetButton = instance_create(view_xview+615, view_yview+50, obj_TargetButton);
+                    weaponBox1 = instance_create(view_xview+590, view_yview+120, obj_W1);
+                    weaponBox2 = instance_create(view_xview+590, view_yview+160, obj_W2);
+                    weaponBox3 = instance_create(view_xview+590, view_yview+200, obj_W3);
+                    instance_create(x, y, obj_TargetReticle);
+                }
+                */
                 
                 EnemyInRange = 1;      // enemy is now in range of Player
                 
@@ -267,6 +287,9 @@ else {
                 needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
                 if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
                     ds_list_add(obj_Player.EnemyList, id);
+                    // obj_Player.enemiesWithinRange += 1; redundant as enemiesWithinRange = size of EnemyList
+                    // show_message("addedByEnemy");
+                    // obj_TargetButton.increment += 1; Target mechanics removed
                 }
                 break;
             }
@@ -277,15 +300,42 @@ else {
                 needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
                 if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
                     ds_list_delete(obj_Player.EnemyList, needToDelete);
+                    // obj_Player.enemiesWithinRange -= 1; redundant as enemiesWithinRange = size of EnemyList
+                    // show_message("deletedByEnemy");
+                    /* Target mechanics removed
+                    if (obj_TargetButton.increment == id) {
+                        obj_TargetButton.increment += 1;
+                    }
+                    */
                 }
             }
         }
         // refresh weights
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
-
         turnBegin = 0;
+        // obj_Player.turnBegin = 1; --removed due to addition of obj_TurnController
     }
 }
+
+/* Target mechanics removed
+// only remove the TargetButton if there are NO enemies remaining in range
+if (obj_Player.enemiesWithinRange == 0) {
+    if (instance_exists(obj_TargetButton)) { // TargetButton only exists if a target was in range
+        with (obj_TargetButton) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W1) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W2) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+        with (obj_W3) {                // so if the target is out of range, destroy the button
+            instance_destroy();
+        }
+    }
+}
+*/
 
 </string>
           </argument>
@@ -309,7 +359,25 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
+            <string>if (is_array(newCoord)) {
+    show_message(string(newCoord[0]) + "," + string(newCoord[1]));
+}
+else {
+    return newCoord;
+}
+
+/*
+for (var i = 0; i &lt; array_height_2d(newCoord); i++) {
+    show_message(string(newCoord[i,0]) + "," + string(newCoord[i,1]) + ": " + string(newCoord[i,2]));
+}
+
+/*
+for (var i = 0; i &lt; array_height_2d(weightArray); i++) {
+    if (weightArray[i, 2] &gt; 0) {
+        show_message(string(weightArray[i,0]) + "," + string(weightArray[i,1]) + ": " + string(weightArray[i,2]));
+    }
+}
+
 </string>
           </argument>
         </arguments>
