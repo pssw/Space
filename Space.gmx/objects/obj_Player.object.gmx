@@ -52,6 +52,8 @@ EnemyList = ds_list_create(); // list of enemies within Player range
 
 path = path_add(); // create new path index to be used
 
+testTurn = ds_list_create();
+
 // initial values for pathArray
 pathArray[0, 0] = (x/32 - 2);
 pathArray[0, 1] = (y/32 - 2);
@@ -396,7 +398,15 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message(string(x/32-2) + "," + string(y/32-2));
+            <string>total = "";
+
+for (var i = 0; i &lt; ds_list_size(testTurn); i++) {
+    total += ds_list_find_value(testTurn, i);
+}
+show_message(total);
+ds_list_clear(testTurn);
+
+// show_message(string(x/32-2) + "," + string(y/32-2));
 </string>
           </argument>
         </arguments>

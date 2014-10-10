@@ -1,4 +1,4 @@
-// scr_Player_Shoot(currentWeapon, target)
+// scr_Player_Shoot(currentWeapon)
 // Player fires it's current weapon at the target
 
 if (obj_ParentUI.inProgress == 0) {
