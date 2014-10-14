@@ -31,7 +31,7 @@ randomize(); // since random() uses the default seed,
              // enemy generation is not REALLY random without this
 
 // Number of enemies based on Level Progression?
-enemyLimit = 2 // L1-5: 10, L6-10: 15, L11-15: 20, etc
+enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
 // 2D-array mirroring map size (30 x 30)
 // 0 = Empty
@@ -65,22 +65,6 @@ for (i = 0; i &lt; enemyLimit; i += 1) {
         // since the playable area mp_grid starts within the 2-cell border, enemyX and
         // enemyY do not need to be changed
         mp_grid_add_cell(obj_PathController.mpGrid, enemyX, enemyY);
-        ds_list_add(obj_TurnController.EnemyTurnList, newEnemy);
-    }
-    else {
-        i -= 1;
-    }
-}
-
-/*
-// place enemies in a square that is not seen by the player up to the enemyLimit
-for (i = 0; i &lt; enemyLimit; i += 1) {
-    enemyX = irandom_range(1, 31);
-    enemyY = irandom_range(1, 31);
-
-    if (enemySpawn[enemyX, enemyY] == 0) {
-        newEnemy = instance_create(enemyX*32, enemyY*32, obj_E1);
-        mp_grid_add_cell(obj_PathController.mpGrid, enemyX-1, enemyY-1);
         ds_list_add(obj_TurnController.EnemyTurnList, newEnemy);
     }
     else {

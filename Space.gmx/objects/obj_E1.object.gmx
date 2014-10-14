@@ -179,8 +179,10 @@ if (hp &lt;= 0) {
     ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
 
     turnBegin = 0;
-    obj_TurnController.incETL += 1;
-    
+    if (EnemyInRange == 1) {
+        obj_TurnController.incETL += 1;
+        
+    }
     instance_destroy();
 }
 
@@ -218,7 +220,9 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
                 ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
 
                 turnBegin = 0;
-                obj_TurnController.incETL += 1;
+                if (EnemyInRange == 1) {
+                    obj_TurnController.incETL += 1;
+                }
             }
             else { // if enemy moves to a different location
                 
@@ -296,7 +300,9 @@ else {
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
         ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
         turnBegin = 0;
-        obj_TurnController.incETL += 1;
+        if (EnemyInRange == 1) {
+            obj_TurnController.incETL += 1;
+        }
     }
 }
 
