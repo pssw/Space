@@ -26,11 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>EnemyTurnList = ds_list_create();
-
-inRangeList = ds_list_create();
-outofRangeList = ds_list_create();
-
-listSorted = 0; // checks whether ETL has been separated into iRL and ooRL
+ETLCopy = ds_list_create();
 incETL = 0;
 EnemyCounter = 0;
 </string>
@@ -61,78 +57,20 @@ EnemyCounter = 0;
 
 if (EnemyCounter == 1) {    
     
-    // we only want to sort the enemies into separate lists ONCE per turn
-    if (listSorted == 0) {
-        listSorted = 1;
-        // separate ETL into 2 lists: one for enemies in range and out for enemies out of range
-        for (var i = 0; i &lt; ds_list_size(EnemyTurnList); i++) {
-            if (ds_list_find_value(EnemyTurnList, i).EnemyInRange == 0) {
-                ds_list_add(outofRangeList, ds_list_find_value(EnemyTurnList, i));
-            }
-            else {
-                ds_list_add(inRangeList, ds_list_find_value(EnemyTurnList, i));
-            }
-        }
-        numEnemyInRange = ds_list_size(inRangeList);
-        numEnemyOutOfRange = ds_list_size(outofRangeList);
-    }
-    // if enemies are in range, activate their movement first
-    if (!ds_list_empty(inRangeList)) {
-        if (incETL &lt; numEnemyInRange) {
-            currentEnemy = ds_list_find_value(inRangeList, incETL);
-            if (instance_exists(currentEnemy)) {
-                if (currentEnemy.turnBegin == 0) {
-                    currentEnemy.turnBegin = 1;
-                }
-            }
-            else {
-                show_message("dead");
-            }
-        }
-        // reach here when all enemies within range have been activated
-        // incETL = numEnemyInRange
-        else {
-            // activate enemies in ooRList
-            if (!ds_list_empty(outofRangeList)) {
-                for (var m = 0; m &lt; numEnemyOutOfRange; m++) {
-                    currentEnemy = ds_list_find_value(outofRangeList, m);
-                    if (currentEnemy.turnBegin &lt; 1) {
-                        currentEnemy.turnBegin = 1;
-                    }
-                }
-                listSorted = 0;
-                incETL = 0;
-                EnemyCounter = 0;
-                ds_list_clear(outofRangeList);
-                ds_list_clear(inRangeList);
-                obj_Player.turnBegin = 1;
-            }
-            // should be finished both enemies in iRList and ooRList
-            else {
-                listSorted = 0;
-                incETL = 0;
-                EnemyCounter = 0;
-                ds_list_clear(outofRangeList);
-                ds_list_clear(inRangeList);
-                obj_Player.turnBegin = 1;
-            }
-        }
-    }
-    // no enemies are in range, do a quick iterate over enemies in ooRList
-    else {
-        for (var j = 0; j &lt; numEnemyOutOfRange; j++) {
-            currentEnemy = ds_list_find_value(outofRangeList, j);
-            if (currentEnemy.turnBegin &lt; 1) {
-                currentEnemy.turnBegin = 1;
-            }
-        }
-        listSorted = 0;
+    numEnemy = ds_list_size(EnemyTurnList);
+    
+    // at the end of the list, start Player's turn
+    if (incETL == numEnemy) {
         incETL = 0;
         EnemyCounter = 0;
-        ds_list_clear(outofRangeList);
-        ds_list_clear(inRangeList);
         obj_Player.turnBegin = 1;
     }
+    else {
+        currentEnemy = ds_list_find_value(EnemyTurnList, incETL);
+        if (currentEnemy.turnBegin == 0) {
+            currentEnemy.turnBegin = 1;
+        }
+    } 
 }
 </string>
           </argument>

@@ -74,8 +74,8 @@
       <object>objects\obj_Fog</object>
       <object>objects\obj_LightenParent</object>
       <object>objects\obj_PathController</object>
+      <object>objects\obj_TurnController_buggy</object>
       <object>objects\obj_TurnController</object>
-      <object>objects\obj_TurnControllerbackupNEW</object>
       <object>objects\obj_TurnControllerbackup</object>
       <object>objects\obj_EnemyGen</object>
       <object>objects\obj_NodeTracer</object>

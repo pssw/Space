@@ -36,14 +36,9 @@ EnemyInRange = 0;  // 1 when in range of Player
 turnBegin = 0; // 1 = Enemy can move
                // 0 = Player can move
                
-endTurn = 0;
-               
 path_E1 = path_add(); // create new path index to be used
 
 shotLimiter = 0;
-
-// this is already done in obj_EnemyGen.Create
-// mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-1, (y/32)-1);
 
 // Stats and Mechanics
 
@@ -59,8 +54,6 @@ rangeArray = scr_Range_Setup(x, y);
 for (var rangeInc = 0; rangeInc &lt; array_height_2d(rangeArray); rangeInc++) {
     rangeArray[rangeInc, 2] = 0;
 }
-
-// setNewReticle = 0; Reticle mechanics removed
 </string>
           </argument>
         </arguments>
@@ -178,11 +171,13 @@ if (hp &lt;= 0) {
     mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
     ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
 
-    turnBegin = 0;
     if (EnemyInRange == 1) {
         obj_TurnController.incETL += 1;
         
     }
+    
+    turnBegin = 0;
+    
     instance_destroy();
 }
 
@@ -214,15 +209,20 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, ((newCoord[0]+2)*32), ((newCoord[1]+2)*32), true)) { // if a path was created, start path        
         
             if ((x == ((newCoord[0]+2)*32)) &amp;&amp; (y = ((newCoord[1]+2)*32))) { // if enemy decides not to move (or cannot move)
-                // technically should never arrive here after shooting since enemy cannot move after shooting
-                // can arrive here if player wasn't in range (not shootable) and scr_Weighted_Move returned a coordinate with the same current location
+                // can arrive here if following a player that moved out of range 
+                // but all available tiles are blocked (scr_Weighted_Move returned current location)
                 mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
                 ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
 
                 turnBegin = 0;
+                
+                obj_TurnController.incETL += 1;
+                
+                /*
                 if (EnemyInRange == 1) {
                     obj_TurnController.incETL += 1;
                 }
+                */
             }
             else { // if enemy moves to a different location
                 
@@ -300,9 +300,13 @@ else {
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
         ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
         turnBegin = 0;
+        
+        obj_TurnController.incETL += 1;
+        /*
         if (EnemyInRange == 1) {
             obj_TurnController.incETL += 1;
         }
+        */
     }
 }
 

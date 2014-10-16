@@ -53,11 +53,11 @@
     <instance objName="obj_PathController" x="32" y="0" name="inst_DF93ADA3" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Devices_Room_Scale" x="64" y="0" name="inst_42B063D1" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_ParentUI" x="96" y="0" name="inst_E4A23301" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_TurnController" x="128" y="0" name="inst_F1FB6FCD" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_F05D48BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Player" x="512" y="512" name="inst_C1CBAEE2" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_747C62FF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="512" y="384" name="inst_9FAF5ACA" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_TurnController" x="128" y="0" name="inst_B83622E5" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="0" name="inst_5E270CFB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="32" name="inst_F239B3D7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="64" name="inst_1462C381" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
