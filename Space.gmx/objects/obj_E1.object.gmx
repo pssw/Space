@@ -214,15 +214,17 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         if (mp_grid_path(obj_PathController.mpGrid, path_E1, x, y, ((newCoord[0]+2)*32), ((newCoord[1]+2)*32), true)) { // if a path was created, start path        
         
             if ((x == ((newCoord[0]+2)*32)) &amp;&amp; (y = ((newCoord[1]+2)*32))) { // if enemy decides not to move (or cannot move)
-                // technically should never arrive here after shooting since enemy cannot move after shooting
-                // can arrive here if player wasn't in range (not shootable) and scr_Weighted_Move returned a coordinate with the same current location
+                // if a Player moved out of range and scr_Weighted_Move returned a coordinate with the same current location,
+                // which would occur if the enemy was supposed to follow the Player but was blocked by another enemy
                 mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
                 ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
-
+                
                 turnBegin = 0;
+                
                 if (EnemyInRange == 1) {
                     obj_TurnController.incETL += 1;
                 }
+                
             }
             else { // if enemy moves to a different location
                 
@@ -287,8 +289,9 @@ else {
                 break;
             }
             else { // after enemy moved, player is out of range
-    
+                
                 EnemyInRange = 0;
+                
                 // find the index of the enemy from the list and delete it
                 needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
                 if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
@@ -300,6 +303,7 @@ else {
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
         ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
         turnBegin = 0;
+        
         if (EnemyInRange == 1) {
             obj_TurnController.incETL += 1;
         }
@@ -328,7 +332,7 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
+            <string>show_message("going to " + string(newCoord[0]) + "," + string(newCoord[1]) + ", weight: " + string(newCoord[2]));
 </string>
           </argument>
         </arguments>
@@ -385,41 +389,6 @@ var percentage;
 percentage = (hp/max_hp) * 100;
 if (percentage &lt; 100) {
     draw_healthbar(x-14, y-16, x+14, y-14, percentage, c_black, c_red, c_lime, 0, true, false);
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="49">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>var check = 0
-
-for (var v = 0; v &lt; array_height_2d(testArray); v++) {
-    if (testArray[v,2] == 1) {
-        show_message("enemy sighted at" + string(testArray[v,0]) + "," + string(testArray[v,1]));
-        check = 1;
-    }
-    else {
-        if (v == array_height_2d(testArray) - 1) &amp;&amp; (check == 0) {
-            show_message("all clear");
-        }
-    }
 }
 </string>
           </argument>

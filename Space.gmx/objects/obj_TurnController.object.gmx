@@ -66,13 +66,13 @@ if (EnemyCounter == 1) {
         listSorted = 1;
         // separate ETL into 2 lists: one for enemies in range and out for enemies out of range
         for (var i = 0; i &lt; ds_list_size(EnemyTurnList); i++) {
-            if (ds_list_find_value(EnemyTurnList, i).EnemyInRange == 0) {
-                ds_list_add(outofRangeList, ds_list_find_value(EnemyTurnList, i));
-            }
-            else {
+            if ((ds_list_find_value(EnemyTurnList, i).EnemyInRange == 1)) {
                 ds_list_add(inRangeList, ds_list_find_value(EnemyTurnList, i));
             }
-        }
+            else {
+                ds_list_add(outofRangeList, ds_list_find_value(EnemyTurnList, i));
+            }
+        }  
         numEnemyInRange = ds_list_size(inRangeList);
         numEnemyOutOfRange = ds_list_size(outofRangeList);
     }
@@ -122,6 +122,7 @@ if (EnemyCounter == 1) {
     else {
         for (var j = 0; j &lt; numEnemyOutOfRange; j++) {
             currentEnemy = ds_list_find_value(outofRangeList, j);
+            
             if (currentEnemy.turnBegin &lt; 1) {
                 currentEnemy.turnBegin = 1;
             }
