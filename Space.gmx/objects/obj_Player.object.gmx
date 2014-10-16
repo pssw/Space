@@ -268,15 +268,16 @@ else {
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
             
             for (var j = 0; j &lt; array_height_2d(LineOfSight); j++) {
-                
+            
                 if ((((enemy.x/32)-2) == LineOfSight[j, 0]) &amp;&amp; (((enemy.y/32)-2) == LineOfSight[j, 1])){ // if the enemy is within player's range
-
+            
+                // if (distance_to_object(enemy) &lt; 64) {           // if the enemy is within player's range
                     if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range
-
+                    
                     }
                     else {  // if the enemy instance came into range after the player moved 
-
                         enemy.EnemyInRange = 1;      // enemy is now in range
+                        
                         // add the enemy to the list
                         needToAdd = ds_list_find_index(EnemyList, enemy);
                         if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
@@ -290,6 +291,7 @@ else {
                 else {  // if the enemy instance is not within range (2 cases: was never in range and was in range but player moved away)
                     if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
                         enemy.EnemyInRange = 0;
+                        
                         // find the index of the enemy from the list and delete it
                         needToDelete = ds_list_find_index(EnemyList, enemy);
                         if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
@@ -299,7 +301,7 @@ else {
                         }
                     }
                     else { // enemy was never in range, do nothing
-                    
+    
                     }
                 }
             }
@@ -396,8 +398,7 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/*
-total = "";
+            <string>total = "";
 
 for (var i = 0; i &lt; ds_list_size(testTurn); i++) {
     total += ds_list_find_value(testTurn, i);

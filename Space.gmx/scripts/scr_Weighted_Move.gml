@@ -73,7 +73,6 @@ if (is_array(bestCoord)) {
         if ((scr_mp_grid_free(obj_PathController.mpGrid, (ds_grid_get(sortedCoord, k, 0)+2)*32, (ds_grid_get(sortedCoord, k, 1)+2)*32)) == 1) {
             target[0] = ds_grid_get(sortedCoord, k, 0);
             target[1] = ds_grid_get(sortedCoord, k, 1);
-            target[2] = ds_grid_get(sortedCoord, k, 2); // the weight of the chosen tile - must be greater than 0 here
             return target;
             break;
         }
@@ -83,7 +82,6 @@ if (is_array(bestCoord)) {
                 var target;
                 target[0] = x/32-2;
                 target[1] = y/32-2;
-                target[2] = 0;
                 return target;
             }
         }
@@ -113,7 +111,6 @@ else {
         if ((scr_mp_grid_free(obj_PathController.mpGrid, (randCoord[0]+2)*32, (randCoord[1]+2)*32)) == 1) {
             target[0] = randCoord[0];
             target[1] = randCoord[1];
-            target[2] = 0;
             return target;
             break;
         }
@@ -122,7 +119,6 @@ else {
             if (eRange == 1) {
                 target[0] = x/32-2;
                 target[1] = y/32-2;
-                target[2] = 0;
                 return target;
             }
             else {

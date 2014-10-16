@@ -21,11 +21,8 @@
 
 var weightCounter = 1;
 
-// for each point in Player's last path
 for (var pathIndex = 0; pathIndex < array_height_2d(argument1); pathIndex++) {
-    // for each tile within Enemy's range
     for (var rangeIndex = 0; rangeIndex < array_height_2d(argument0); rangeIndex++) {
-        // if the Player's path point is equal to a tile in the Enemy's range, add a weight to that tile
         if (argument1[pathIndex, 0]) == argument0[rangeIndex, 0] && argument1[pathIndex, 1] == argument0[rangeIndex, 1] {
             argument0[rangeIndex, 2] = weightCounter;
             weightCounter += 1;
