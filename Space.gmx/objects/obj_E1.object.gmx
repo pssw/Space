@@ -197,9 +197,9 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
             shot = instance_create(x, y, obj_Pulse1);
         }
         ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
-
-        turnBegin = 0;
-        obj_TurnController.incETL += 1;
+        
+        // Enemy's turn ends when the bullet is destroyed (in obj_Pulse1's Step Event)
+        // The enemy turn list incrementer is also increased
     }
     // if the Player is not in range of enemy, complete movement
     else {
@@ -332,7 +332,9 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
+            <string>show_message(EnemyInRange);
+
+// show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
 </string>
           </argument>
         </arguments>

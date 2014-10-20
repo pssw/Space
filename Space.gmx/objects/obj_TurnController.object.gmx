@@ -26,7 +26,12 @@
           <argument>
             <kind>1</kind>
             <string>EnemyTurnList = ds_list_create();
-ETLCopy = ds_list_create();
+
+inRangeList = ds_list_create();
+outofRangeList = ds_list_create();
+
+listSorted = 0; // checks whether ETL has been separated into iRL and ooRL
+
 incETL = 0;
 EnemyCounter = 0;
 </string>
@@ -55,14 +60,38 @@ EnemyCounter = 0;
 // and let each enemy do their action.
 // Set EnemyCounter to 0 and the player's turnBegin to 1.
 
-if (EnemyCounter == 1) {    
+if (EnemyCounter == 1) {
     
     numEnemy = ds_list_size(EnemyTurnList);
+    
+    // we only want to sort the enemies into separate lists ONCE per turn
+    if (listSorted == 0) {
+        listSorted = 1;
+        // separate ETL into 2 lists: one for enemies in range and out for enemies out of range
+        for (var i = 0; i &lt; numEnemy; i++) {
+            if (ds_list_find_value(EnemyTurnList, i).EnemyInRange &gt; 0) {
+                ds_list_add(inRangeList, ds_list_find_value(EnemyTurnList, i));
+                
+            }
+            else {
+                ds_list_add(outofRangeList, ds_list_find_value(EnemyTurnList, i));
+            }
+        }
+        numEnemyInRange = ds_list_size(inRangeList);
+        numEnemyOutOfRange = ds_list_size(outofRangeList);
+    }
+    
+    /*
+    JUST ADDED THE SYSTEM FOR SPLITTING THE LIST AGAIN.
+    */
     
     // at the end of the list, start Player's turn
     if (incETL == numEnemy) {
         incETL = 0;
         EnemyCounter = 0;
+        listSorted = 0;
+        ds_list_clear(inRangeList);
+        ds_list_clear(outofRangeList);
         obj_Player.turnBegin = 1;
     }
     else {
