@@ -273,11 +273,11 @@ else {
                 if ((((enemy.x/32)-2) == LineOfSight[j, 0]) &amp;&amp; (((enemy.y/32)-2) == LineOfSight[j, 1])){ // if the enemy is within player's range
                     
                     if (enemy.EnemyInRange == 1) { // if the enemy instance was already within range
-                        
+                        enemy.chasingPlayer = 0;
                     }
                     else {  // if the enemy instance came into range after the player moved 
                         enemy.EnemyInRange = 1;      // enemy is now in range
-                        
+                        enemy.chasingPlayer = 0;
                         // add the enemy to the list
                         needToAdd = ds_list_find_index(EnemyList, enemy);
                         if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
@@ -298,6 +298,8 @@ else {
                         if (enemy.EnemyInRange == 1) { // enemy instance was in range but left
                             enemy.EnemyInRange = 0;
                             
+                            enemy.chasingPlayer = 1;
+                            
                             // find the index of the enemy from the list and delete it
                             needToDelete = ds_list_find_index(EnemyList, enemy);
                             if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList
@@ -307,13 +309,14 @@ else {
                             }
                         }
                         else { // enemy was never in range, do nothing
-                        
+                            enemy.chasingPlayer = 0;
                         }
                     }
                 }
             }
         }
         //LineOfSight = scr_Range_Setup(x,y);
+        ds_list_clear(testTurn);
         turnBegin = 0;
         obj_TurnController.EnemyCounter = 1;
     }
@@ -405,15 +408,13 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/*
-
-total = "";
+            <string>total = "";
 
 for (var i = 0; i &lt; ds_list_size(testTurn); i++) {
     total += ds_list_find_value(testTurn, i);
 }
 show_message(total);
-ds_list_clear(testTurn);
+
 
 // show_message(string(x/32-2) + "," + string(y/32-2));
 </string>

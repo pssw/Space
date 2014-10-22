@@ -31,7 +31,7 @@ randomize(); // since random() uses the default seed,
              // enemy generation is not REALLY random without this
 
 // Number of enemies based on Level Progression?
-enemyLimit = 3 // L1-5: 10, L6-10: 15, L11-15: 20, etc
+enemyLimit = 10 // L1-5: 10, L6-10: 15, L11-15: 20, etc
 
 // 2D-array mirroring map size (30 x 30)
 // 0 = Empty

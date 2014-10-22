@@ -62,6 +62,7 @@ image_angle = direction - 90;
     obj_ParentUI.inProgress = 0;
     obj_Player.turnBegin = 0;
     obj_TurnController.EnemyCounter = 1;
+    
     instance_destroy();
 }
 </string>

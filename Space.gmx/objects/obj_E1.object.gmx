@@ -40,6 +40,11 @@ path_E1 = path_add(); // create new path index to be used
 
 shotLimiter = 0;
 
+chasingPlayer = 0;
+
+resetTarget = 0; // if 1, obj_E1 is stuck waiting for another obj_E1 to move so it can take it's place.
+                 // instead, give it a random coordinate for next turn
+
 // Stats and Mechanics
 
 hp = 3;
@@ -169,14 +174,14 @@ if (hp &lt;= 0) {
     removeEnemyTurn = ds_list_find_index(obj_TurnController.EnemyTurnList, id);
     ds_list_delete(obj_TurnController.EnemyTurnList, removeEnemyTurn);
     mp_grid_clear_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
-    ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
+    ds_list_add(obj_Player.testTurn, (string(id)+"/enddeath#"))
 
     if (EnemyInRange == 1) {
         obj_TurnController.incETL += 1;
-        
     }
     
     turnBegin = 0;
+    chasingPlayer = 0;
     
     instance_destroy();
 }
@@ -187,16 +192,26 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
     ds_list_add(obj_Player.testTurn, (string(id)+"/start#"))
 
     weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
-    newCoord = scr_Weighted_Move(weightArray);
+    
+    // If Enemy has been waiting at the same place due to chasing an enemy through a blocked tile, select a new random coordinate
+    // Otherwise, follow the Weighted Move algorithm
+    if (resetTarget == 1) {
+        resetTarget = 0;
+        newCoord = scr_Random_Move(weightArray);
+    }
+    else {
+        newCoord = scr_Weighted_Move(weightArray);
+    }
 
     // if the Player is in range of enemy, shoot and end turn
     if (EnemyInRange == 1) {
+    
         if (shotLimiter == 0) {
             obj_Player.enemyShooting = 1;
             shotLimiter = 1;
             shot = instance_create(x, y, obj_Pulse1);
         }
-        ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
+        ds_list_add(obj_Player.testTurn, (string(id)+"/endshoot#"))
         
         // Enemy's turn ends when the bullet is destroyed (in obj_Pulse1's Step Event)
         // The enemy turn list incrementer is also increased
@@ -212,17 +227,17 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
                 // can arrive here if following a player that moved out of range 
                 // but all available tiles are blocked (scr_Weighted_Move returned current location)
                 mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
-                ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
-
-                turnBegin = 0;
+                ds_list_add(obj_Player.testTurn, (string(id)+"/endstay#"))
                 
-                obj_TurnController.incETL += 1;
-                
-                /*
-                if (EnemyInRange == 1) {
+                // If Enemy has waited for a turn in the same place while chasing Enemy (it's chosen path is blocked), 
+                // it finds a random coordinate next turn (it has bad memory)
+                if ((EnemyInRange == 1) || (chasingPlayer == 1)) {
                     obj_TurnController.incETL += 1;
+                    chasingPlayer = 0;
+                    resetTarget = 1;
                 }
-                */
+                
+                turnBegin = 0;
             }
             else { // if enemy moves to a different location
                 
@@ -277,36 +292,56 @@ else {
         
             if ((((obj_Player.x/32)-2) == rangeArray[j, 0]) &amp;&amp; (((obj_Player.y/32)-2) == rangeArray[j, 1])){ // after enemy moved, player is in range
                 
-                EnemyInRange = 1;      // enemy is now in range of Player
+                if (EnemyInRange == 1) { // Enemy was already in range of Player
+                    // shouldn't get here because Enemy always shoots if in range of Player
+                    chasingPlayer = 0;
+                    obj_TurnController.incETL += 1;
+                }
+                else { // Player came into Enemy's range after Enemy moved
+                    
+                    if (chasingPlayer == 1) { // if Enemy was chasing the Player, 
+                                              // it is in the inRangeList and needs to increment that list's index
+                        obj_TurnController.incETL += 1;
+                    }
                 
-                // add the enemy to the list
-                needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
-                if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
-                    ds_list_add(obj_Player.EnemyList, id);
+                    EnemyInRange = 1;
+                    chasingPlayer = 0;
+                    // add the enemy to the list
+                    needToAdd = ds_list_find_index(obj_Player.EnemyList, id);
+                    if (needToAdd == -1) { // if the enemy is not already in the EnemyList, add it
+                        ds_list_add(obj_Player.EnemyList, id);
+                    }
                 }
                 break;
             }
             else { // after enemy moved, player is out of range
-    
-                EnemyInRange = 0;
-                // find the index of the enemy from the list and delete it
-                needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
-                if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
-                    ds_list_delete(obj_Player.EnemyList, needToDelete);
+                
+                if (j != array_height_2d(rangeArray) - 1) { // continue looking for Player instance until the end of Enemy's range list
+                    continue;
+                }
+                else { // if Player wasn't found in Enemy's entire range
+                
+                    if (EnemyInRange == 1) { // Enemy was in range last turn but moved out
+                        // Leave this empty for now since Enemy has no "retreat" mechanic
+                        EnemyInRange = 0;
+                        chasingPlayer = 0;
+                    }
+                    else { // Enemy was never in range
+                        EnemyInRange = 0;
+                        chasingPlayer = 0;
+                        // find the index of the enemy from the list and delete it
+                        needToDelete = ds_list_find_index(obj_Player.EnemyList, id)
+                        if (needToDelete &gt; -1) { // if the enemy still exists in EnemyList, delete it
+                            ds_list_delete(obj_Player.EnemyList, needToDelete);
+                        }
+                    }
                 }
             }
         }
         // refresh weights
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
-        ds_list_add(obj_Player.testTurn, (string(id)+"/end#"))
+        ds_list_add(obj_Player.testTurn, (string(id)+"/endmove#"))
         turnBegin = 0;
-        
-        obj_TurnController.incETL += 1;
-        /*
-        if (EnemyInRange == 1) {
-            obj_TurnController.incETL += 1;
-        }
-        */
     }
 }
 
@@ -332,9 +367,7 @@ else {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_message(EnemyInRange);
-
-// show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
+            <string>show_message("at " + string(x/32-2) + "," + string(y/32-2) + ", going to " + string(newCoord[0]) + "," + string(newCoord[1]));
 </string>
           </argument>
         </arguments>

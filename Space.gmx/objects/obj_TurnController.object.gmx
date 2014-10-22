@@ -68,10 +68,10 @@ if (EnemyCounter == 1) {
     if (listSorted == 0) {
         listSorted = 1;
         // separate ETL into 2 lists: one for enemies in range and out for enemies out of range
+        // also add enemies that were previously in range of Player in IRL (chasingPlayer = 1)
         for (var i = 0; i &lt; numEnemy; i++) {
-            if (ds_list_find_value(EnemyTurnList, i).EnemyInRange &gt; 0) {
+            if ((ds_list_find_value(EnemyTurnList, i).EnemyInRange &gt; 0) || (ds_list_find_value(EnemyTurnList, i).chasingPlayer &gt; 0)) {
                 ds_list_add(inRangeList, ds_list_find_value(EnemyTurnList, i));
-                
             }
             else {
                 ds_list_add(outofRangeList, ds_list_find_value(EnemyTurnList, i));
@@ -81,25 +81,62 @@ if (EnemyCounter == 1) {
         numEnemyOutOfRange = ds_list_size(outofRangeList);
     }
     
-    /*
-    JUST ADDED THE SYSTEM FOR SPLITTING THE LIST AGAIN.
-    */
+    // if enemies are in range or were in range last turn, activate their movement first
+    if (numEnemyInRange &gt; 0) {
     
-    // at the end of the list, start Player's turn
-    if (incETL == numEnemy) {
+        // iterate through iRL one at a time
+        if (incETL &lt; numEnemyInRange) {
+            currentEnemy = ds_list_find_value(inRangeList, incETL);
+            if (currentEnemy.turnBegin == 0) {
+                currentEnemy.turnBegin = 1;
+            }
+        }
+        // reach here when all enemies from inRangeList have been activated
+        else {
+            // if there are enemies out of range, activate them
+            if (numEnemyOutOfRange &gt; 0) {
+                for (var j = 0; j &lt; numEnemyOutOfRange; j++) {
+                    currentEnemy = ds_list_find_value(outofRangeList, j);
+                    if (currentEnemy.turnBegin &lt; 1) {
+                        currentEnemy.turnBegin = 1;
+                    }
+                }
+                listSorted = 0;
+                incETL = 0;
+                EnemyCounter = 0;
+                
+                ds_list_clear(outofRangeList);
+                ds_list_clear(inRangeList);
+                obj_Player.turnBegin = 1;
+            }
+            // if there are no enemies out of range, reset variables and start Player's turn
+            else {
+                listSorted = 0;
+                incETL = 0;
+                EnemyCounter = 0;
+                ds_list_clear(outofRangeList);
+                ds_list_clear(inRangeList);
+                obj_Player.turnBegin = 1;
+            }
+        }
+    }
+    // there are no enemies in range or chasing the Player, activate all enemies simultaneously
+    else {
+        for (var k = 0; k &lt; numEnemyOutOfRange; k++) {
+            currentEnemy = ds_list_find_value(outofRangeList, k);
+            if (currentEnemy.turnBegin &lt; 1) {
+                currentEnemy.turnBegin = 1;
+            }
+        }
+        listSorted = 0;
         incETL = 0;
         EnemyCounter = 0;
-        listSorted = 0;
-        ds_list_clear(inRangeList);
+        
         ds_list_clear(outofRangeList);
+        ds_list_clear(inRangeList);
+        
         obj_Player.turnBegin = 1;
     }
-    else {
-        currentEnemy = ds_list_find_value(EnemyTurnList, incETL);
-        if (currentEnemy.turnBegin == 0) {
-            currentEnemy.turnBegin = 1;
-        }
-    } 
 }
 </string>
           </argument>

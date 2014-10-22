@@ -54,6 +54,7 @@
     <script>scripts\scr_Device_Room_Scale.gml</script>
     <script>scripts\scr_Movement.gml</script>
     <script>scripts\scr_Weighted_Move.gml</script>
+    <script>scripts\scr_Random_Move.gml</script>
     <script>scripts\scr_EnemyPath.gml</script>
     <script>scripts\scr_mp_grid_free.gml</script>
     <script>scripts\scr_Player_Shoot.gml</script>

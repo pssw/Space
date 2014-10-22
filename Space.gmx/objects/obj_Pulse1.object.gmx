@@ -63,8 +63,8 @@ image_angle = direction - 90;
     // the current enemy that shot the Player will end it's turn and increment the turn list
     with (obj_TurnController.currentEnemy) {
         turnBegin = 0;
+        chasingPlayer = 0;
     }
-    
     obj_TurnController.incETL += 1;
 }
 </string>
