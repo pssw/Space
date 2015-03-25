@@ -62,7 +62,7 @@ mpGrid = mp_grid_create(48, 48, 29, 29, 32, 32); // create a new grid for this r
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Debug
+            <string>// Debug
 draw_set_alpha(0.3);
 mp_grid_draw(mpGrid);
 draw_set_alpha(1);

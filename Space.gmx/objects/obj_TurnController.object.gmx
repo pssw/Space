@@ -4,7 +4,7 @@
   <solid>0</solid>
   <visible>-1</visible>
   <depth>0</depth>
-  <persistent>0</persistent>
+  <persistent>-1</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
@@ -25,10 +25,14 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>EnemyTurnList = ds_list_create();
+            <string>image_speed = 0;
+
+EnemyTurnList = ds_list_create();
 
 inRangeList = ds_list_create();
 outofRangeList = ds_list_create();
+
+image_index = 0;
 
 listSorted = 0; // checks whether ETL has been separated into iRL and ooRL
 

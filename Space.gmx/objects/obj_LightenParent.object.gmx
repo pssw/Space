@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>//make any object that you want to be lightened have this object as their parent.
+image_speed = 0;
 </string>
           </argument>
         </arguments>

@@ -4,7 +4,7 @@
   <solid>0</solid>
   <visible>-1</visible>
   <depth>0</depth>
-  <persistent>0</persistent>
+  <persistent>-1</persistent>
   <parentName>obj_LightenParent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
@@ -54,6 +54,8 @@ path = path_add(); // create new path index to be used
 
 testTurn = ds_list_create();
 
+global.currentFloor = 1; // used to determine the number of enemies on the current floor
+
 // initial values for pathArray
 pathArray[0, 0] = (x/32 - 2);
 pathArray[0, 1] = (y/32 - 2);
@@ -68,6 +70,12 @@ max_hp = 10;
 xp = 0;
 
 currentWeapon = 1;
+
+// Create the Path Controller, Parent UI, Turn Control, and PHP Control objects
+
+instance_create(32, 0, obj_ParentUI);
+instance_create(64, 0, obj_TurnController);
+instance_create(96, 0, obj_PHPController);
 </string>
           </argument>
         </arguments>
@@ -150,17 +158,22 @@ if (start == 0) {  // original orientation UP
     // see obj_E1 explanation
     mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2);
 }
-
 else { // player orientation = direction
        // CHANGE: This rotates sprite and causes Fog issues.
        // Make "diagonal" sprites instead of setting image_angle
     if ((isMoving == true)) {
         image_angle = direction;
     }
+
+}
+
+if (hp == 0) {
+    show_message("You Died");
+    hp = 10;
+    // room_restart(); // change to go to Menu or first floor
 }
 
 if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &amp;&amp; !instance_exists(obj_Pulse1)) {
-    
     with (obj_E1) {
         shotLimiter = 0;
     }
@@ -265,6 +278,7 @@ else {
         
         mp_grid_add_cell(obj_PathController.mpGrid, (x/32)-2, (y/32)-2); // if finished, add self back into grid
         isMoving = false;
+        
         for (i = 0; i &lt; instance_number(obj_E1); i += 1) {  // for each instance of the enemy object
             enemy = instance_find(obj_E1, i);               // get the unique instance id of the enemy
             
@@ -315,10 +329,17 @@ else {
                 }
             }
         }
-        //LineOfSight = scr_Range_Setup(x,y);
         ds_list_clear(testTurn);
         turnBegin = 0;
-        obj_TurnController.EnemyCounter = 1;
+        
+        // if entering a portal, move again
+        if ((place_meeting(x, y, obj_Portal)) &amp;&amp; (obj_Player.isMoving == false)) {
+            turnBegin = 1;
+        }
+        // else, enemy's turn
+        else {
+            obj_TurnController.EnemyCounter = 1;
+        }
     }
 }
 
@@ -408,13 +429,13 @@ if (menuCounter &gt; 0) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>total = "";
+            <string>
+total = "";
 
 for (var i = 0; i &lt; ds_list_size(testTurn); i++) {
     total += ds_list_find_value(testTurn, i);
 }
 show_message(total);
-
 
 // show_message(string(x/32-2) + "," + string(y/32-2));
 </string>

@@ -44,6 +44,9 @@
       <sprite>sprites\spr_MenuInventory</sprite>
       <sprite>sprites\spr_MenuDarken</sprite>
     </sprites>
+    <sprites name="Event">
+      <sprite>sprites\spr_Portal</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background">
     <background>background\background0</background>
@@ -60,6 +63,7 @@
     <script>scripts\scr_Player_Shoot.gml</script>
     <script>scripts\scr_Level_Up.gml</script>
     <script>scripts\scr_Range_Setup.gml</script>
+    <script>scripts\README.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">
@@ -70,6 +74,7 @@
       <object>objects\obj_W1</object>
       <object>objects\obj_W2</object>
       <object>objects\obj_W3</object>
+      <object>objects\obj_PHPController</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>
@@ -104,9 +109,13 @@
       <object>objects\obj_MenuW3</object>
       <object>objects\obj_MenuDarken</object>
     </objects>
+    <objects name="Event">
+      <object>objects\obj_Portal</object>
+    </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_Main</room>
+    <room>rooms\rm_NextLevel</room>
   </rooms>
   <constants number="3">
     <constant name="landscape">0</constant>
