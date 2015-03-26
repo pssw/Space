@@ -50,16 +50,17 @@
     <view visible="0" objName="&lt;undefined&gt;" xview="0" yview="0" wview="640" hview="480" xport="0" yport="0" wport="640" hport="480" hborder="32" vborder="32" hspeed="-1" vspeed="-1"/>
   </views>
   <instances>
-    <instance objName="obj_Devices_Room_Scale" x="64" y="0" name="inst_42B063D1" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_F05D48BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_747C62FF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="512" y="384" name="inst_9FAF5ACA" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_NextPortal" x="512" y="448" name="inst_6927076F" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_PathController" x="32" y="0" name="inst_CEE2F9ED" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_ParentUI" x="96" y="0" name="inst_24049FA1" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_StopBullet" x="128" y="0" name="inst_E185C175" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_TurnController" x="160" y="0" name="inst_4807FB6B" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_PHPController" x="192" y="0" name="inst_1A2DE217" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_NextPortal" x="448" y="480" name="inst_CF232E42" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_Devices_Room_Scale" x="64" y="0" name="inst_14814922" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_PathController" x="32" y="0" name="inst_49352260" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_ParentUI" x="96" y="0" name="inst_92C055A6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_StopBullet" x="128" y="0" name="inst_E0A1C397" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_TurnController" x="160" y="0" name="inst_1A8B0415" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_PHPController" x="192" y="0" name="inst_2645DADA" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_E1" x="448" y="544" name="inst_BECD0159" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="0" name="inst_5E270CFB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="32" name="inst_F239B3D7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="64" name="inst_1462C381" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>

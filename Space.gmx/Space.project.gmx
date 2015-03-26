@@ -27,6 +27,7 @@
     <sprites name="Enemies">
       <sprite>sprites\spr_E1</sprite>
       <sprite>sprites\spr_E1Angle</sprite>
+      <sprite>sprites\spr_E2</sprite>
     </sprites>
     <sprites name="Combat">
       <sprite>sprites\spr_Pulse1</sprite>
@@ -45,7 +46,11 @@
       <sprite>sprites\spr_MenuDarken</sprite>
     </sprites>
     <sprites name="Event">
-      <sprite>sprites\spr_Portal</sprite>
+      <sprite>sprites\spr_NextPortal</sprite>
+      <sprite>sprites\spr_BackPortal</sprite>
+    </sprites>
+    <sprites name="Start">
+      <sprite>sprites\spr_Start</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -69,6 +74,7 @@
     <objects name="Player">
       <object>objects\obj_Player</object>
       <object>objects\obj_ParentUI</object>
+      <object>objects\obj_StopBullet</object>
       <object>objects\obj_TargetButton</object>
       <object>objects\obj_TargetReticle</object>
       <object>objects\obj_W1</object>
@@ -89,6 +95,7 @@
     <objects name="Enemies">
       <object>objects\obj_E1</object>
       <object>objects\obj_E1backup</object>
+      <object>objects\obj_E2</object>
     </objects>
     <objects name="Mobile">
       <object>objects\obj_Devices_Room_Scale</object>
@@ -110,12 +117,17 @@
       <object>objects\obj_MenuDarken</object>
     </objects>
     <objects name="Event">
-      <object>objects\obj_Portal</object>
+      <object>objects\obj_NextPortal</object>
+    </objects>
+    <objects name="Start">
+      <object>objects\obj_StartButton</object>
     </objects>
   </objects>
   <rooms name="rooms">
+    <room>rooms\rm_Start</room>
     <room>rooms\rm_Main</room>
     <room>rooms\rm_NextLevel</room>
+    <room>rooms\rm_Boss5</room>
   </rooms>
   <constants number="3">
     <constant name="landscape">0</constant>

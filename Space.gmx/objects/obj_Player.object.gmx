@@ -71,9 +71,11 @@ xp = 0;
 
 currentWeapon = 1;
 
-// Create the Path Controller, Parent UI, Turn Control, and PHP Control objects
+// Create the Parent UI, Turn Controller, and Player HP Controller objects
 
-instance_create(32, 0, obj_ParentUI);
+/*
+instance_create(0, 0, obj_ParentUI);
+instance_create(32, 0, obj_StopBullet);
 instance_create(64, 0, obj_TurnController);
 instance_create(96, 0, obj_PHPController);
 </string>
@@ -148,8 +150,10 @@ instance_create(96, 0, obj_PHPController);
             <kind>1</kind>
             <string>// once the last fog tile has been placed, generate enemies
 if (instance_position(1024, 1024, obj_Fog) &amp;&amp; (enemyGen == 0)) {
-    instance_create(0, 0, obj_EnemyGen);
-    enemyGen = 1;
+    if ((global.currentFloor mod 5) != 0) {
+        instance_create(0, 0, obj_EnemyGen);
+        enemyGen = 1;
+    }
 }
 
 if (start == 0) {  // original orientation UP
@@ -333,7 +337,7 @@ else {
         turnBegin = 0;
         
         // if entering a portal, move again
-        if ((place_meeting(x, y, obj_Portal)) &amp;&amp; (obj_Player.isMoving == false)) {
+        if ((place_meeting(x, y, obj_NextPortal)) &amp;&amp; (obj_Player.isMoving == false)) {
             turnBegin = 1;
         }
         // else, enemy's turn
@@ -484,6 +488,29 @@ show_message(total);
         menuCounter = 15;
     }
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="65">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_message(global.currentFloor);
 </string>
           </argument>
         </arguments>

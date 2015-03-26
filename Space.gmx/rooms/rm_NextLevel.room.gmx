@@ -53,8 +53,13 @@
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_F05D48BF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="160" y="0" name="inst_747C62FF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="&lt;undefined&gt;" x="512" y="384" name="inst_9FAF5ACA" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_Devices_Room_Scale" x="32" y="0" name="inst_14814922" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_PathController" x="64" y="0" name="inst_49352260" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_Devices_Room_Scale" x="64" y="0" name="inst_14814922" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_PathController" x="32" y="0" name="inst_49352260" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_ParentUI" x="96" y="0" name="inst_92C055A6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_StopBullet" x="128" y="0" name="inst_E0A1C397" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_TurnController" x="160" y="0" name="inst_1A8B0415" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_PHPController" x="192" y="0" name="inst_2645DADA" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_NextPortal" x="448" y="512" name="inst_CF232E42" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="0" name="inst_5E270CFB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="32" name="inst_F239B3D7" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_Fog" x="0" y="64" name="inst_1462C381" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
