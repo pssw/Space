@@ -67,7 +67,11 @@ LineOfSight = scr_Range_Setup(x,y);
 level = 1;
 hp = 10;
 max_hp = 10;
+shield = 3
+max_shield = 3;
+regen = 7
 xp = 0;
+dmg = 1;
 
 currentWeapon = 1;
 
@@ -177,11 +181,19 @@ if (hp == 0) {
     // room_restart(); // change to go to Menu or first floor
 }
 
+if (regen == 0) {
+    if (shield &lt; max_shield) {
+        shield += 1;
+    }
+    regen = 7;
+}
+
 if (isMoving == false &amp;&amp; turnBegin == 1 &amp;&amp; enemyShooting == 0 &amp;&amp; !instance_exists(obj_Pulse1)) {
+    
     with (obj_E1) {
         shotLimiter = 0;
     }
-
+    
     if (mouse_check_button_pressed(mb_left)) {
         
         // if clicking on self, do nothing (holding on self covered in another event - opening menu)
@@ -334,13 +346,15 @@ else {
             }
         }
         ds_list_clear(testTurn);
+        show_message("test2");
         turnBegin = 0;
+        regen -= 1;
         
         // if entering a portal, move again
         if ((place_meeting(x, y, obj_NextPortal)) &amp;&amp; (obj_Player.isMoving == false)) {
             turnBegin = 1;
         }
-        // else, enemy's turn
+        
         else {
             obj_TurnController.EnemyCounter = 1;
         }

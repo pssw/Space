@@ -195,22 +195,24 @@ if (isMoving == false &amp;&amp; turnBegin == 1) {
         if (shotLimiter == 0) {
             obj_Player.enemyShooting = 1;
             shotLimiter = 1;
-            
             ds_list_add(obj_Player.testTurn, (string(id)+"/endshoot#"))
             shot = instance_create(x, y, obj_Pulse1);
             
         }
+        //this keeps running until bullet is destroyed????
         // Enemy's turn ends when the bullet is destroyed (in obj_Pulse1's Step Event)
+        /*
         obj_TurnController.incETL += 1;
         obj_Player.enemyShooting = 0;
         chasingPlayer = 0;
         turnBegin = 0;
+        */
         
     }
     // if the Player is not in range of enemy, complete movement
     else {
         weightArray = scr_EnemyPath(rangeArray, obj_Player.pathArray);
-    
+        
         // If Enemy has been waiting at the same place due to chasing an enemy through a blocked tile, select a new random coordinate
         // Otherwise, follow the Weighted Move algorithm
         if (resetTarget == 1) {

@@ -96,8 +96,8 @@ if (EnemyCounter == 1) {
             }
         }
         // reach here when all enemies from inRangeList have been activated
+        // if there are enemies out of range, activate them
         else {
-            // if there are enemies out of range, activate them
             if (numEnemyOutOfRange &gt; 0) {
                 for (var j = 0; j &lt; numEnemyOutOfRange; j++) {
                     currentEnemy = ds_list_find_value(outofRangeList, j);

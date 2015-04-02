@@ -54,12 +54,21 @@ image_angle = direction - 90;
             <string>if (instance_position(x, y, obj_Player)) {
 
     with (obj_Player) {
+        if (shield &gt; 0) {
+            shield -= 1;
+        }
+        else {
         hp -= 1;
+        }
     }
     // destroy bullet
-    obj_Player.enemyShooting = 0;
     instance_destroy();
-
+    
+    obj_TurnController.incETL += 1;
+    obj_Player.enemyShooting = 0;
+    obj_TurnController.currentEnemy.chasingPlayer = 0;
+    obj_TurnController.currentEnemy.turnBegin = 0;
+    
 }
 </string>
           </argument>

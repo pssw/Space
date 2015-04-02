@@ -34,6 +34,7 @@ randomize(); // since random() uses the default seed,
 
 // Number of enemies based on Level Progression?
 //enemyLimit = 5 + (global.currentFloor * 5); // L1-5: 10, L6-10: 15, L11-15: 20, etc
+
 if (global.currentFloor &lt; 6) {
     enemyLimit = 10;
 }

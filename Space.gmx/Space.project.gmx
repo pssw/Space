@@ -68,7 +68,7 @@
     <script>scripts\scr_Player_Shoot.gml</script>
     <script>scripts\scr_Level_Up.gml</script>
     <script>scripts\scr_Range_Setup.gml</script>
-    <script>scripts\README.gml</script>
+    <script>scripts\README_NEW.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="Player">
@@ -81,6 +81,7 @@
       <object>objects\obj_W2</object>
       <object>objects\obj_W3</object>
       <object>objects\obj_PHPController</object>
+      <object>objects\obj_PSHController</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_Fog</object>

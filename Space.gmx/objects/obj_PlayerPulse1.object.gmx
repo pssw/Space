@@ -56,10 +56,11 @@ image_angle = direction - 90;
             <string>if (instance_position(x, y, aim)) {
 
     with (aim) {
-        hp -= 1;
+        hp -= obj_Player.dmg;
     }
     // destroy bullet
     obj_StopBullet.inProgress = 0;
+    obj_Player.regen -= 1;
     obj_Player.turnBegin = 0;
     obj_TurnController.EnemyCounter = 1;
     
